@@ -100,4 +100,19 @@ rule seqkit_cleaned_reads:
         "seqkit"
     shell:
         "seqkit stats -j {threads} -T {input} -o {output}"
-
+# Cleaned sing reads stats
+rule seqkit_cleaned_reads_sing:
+    input:
+        expand("snakestream/reads_clean/{sample}_sing_clean.fastq.gz", sample=SAMPLES)
+    output:
+        protected("snakestream/stats/seqkit_cleaned_reads_sing.tsv")
+    threads: 16
+    resources:
+        mem_mb=20000,
+        time="10:00:00",
+        qos="normal",
+        **default_resources(),
+    conda:
+        "seqkit"
+    shell:
+        "seqkit stats -j {threads} -T {input} -o {output}"

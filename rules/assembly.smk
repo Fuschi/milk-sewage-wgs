@@ -13,6 +13,7 @@ rule assembly_megahit_genome:
     input:
         r1_clean = "snakestream/reads_clean/{sample}_R1_clean.fastq.gz",
         r2_clean = "snakestream/reads_clean/{sample}_R2_clean.fastq.gz",
+        sing_clean="snakestream/reads_clean/{sample}_sing_clean.fastq.gz"
     output:
         contigs=protected("snakestream/assembly_megahit_genome/{sample_type}/{sample}/{sample}.contigs.fa"),
     params:
@@ -37,6 +38,7 @@ rule assembly_megahit_genome:
         --verbose \
         --min-contig-len 1000 \
         -1 {input.r1_clean} -2 {input.r2_clean} \
+        -r {input.sing_clean}\
         -o {params.dir_out} \
            > {log} 2>&1
         mv {params.contigs} {output.contigs}

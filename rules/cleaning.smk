@@ -86,7 +86,7 @@ rule bbduk_trim:
 			> {log} 2>&1
         """
 
-# Remove host reads using Bowtie2 and Samtools
+# Remove host reads from R1 and R2 using Bowtie2 and Samtools
 # ─────────────────────────────────────────────────────────────
 rule remove_host:
     input:
@@ -130,6 +130,52 @@ rule remove_host:
         echo "== Converting BAM to FASTQ =="
         samtools fastq -@ {threads} -1 {output.r1_clean} -2 {output.r2_clean} \
         -0 /dev/null -s /dev/null -n {output.sorted}
+
+        echo "== Done =="
+        ) > {log} 2>&1
+        """
+# Remove host reads from singleton using Bowtie2 and Samtools
+# ─────────────────────────────────────────────────────────────
+rule remove_host_sing:
+    input:
+        singleton = protected("snakestream/reads_trim/{sample}_sing.fastq.gz"),
+        index_check = "snakestream/host/bosTau9.1.bt2"
+    output:
+        singleton_clean = protected("snakestream/reads_clean/{sample}_sing_clean.fastq.gz"),
+        bam =      temp("snakestream/reads_clean/{sample}_sing_hostaligned.bam"),
+        unmapped = temp("snakestream/reads_clean/{sample}_sing_unmapped.bam"),
+        sorted =   protected("snakestream/reads_clean/{sample}_sing_unmapped_sorted.bam")
+    params:
+        index = "snakestream/host/bosTau9"
+    log:
+        "logs/remove_host/{sample}_sing.log"
+    threads: 4
+    resources:
+        mem_mb=64000,
+        time="03:00:00",
+        qos="normal",
+        **default_resources(),
+    conda:
+        "hostremoval"
+    shell:
+        """
+        (
+        set -euo pipefail
+
+        echo "== Bowtie2 mapping =="
+        bowtie2 -p {threads} -x {params.index} \
+             -U {input.singleton} -S /dev/stdout |
+        samtools view -bS - > {output.bam}
+
+        echo "== Filtering unmapped reads =="
+        samtools view -b -f 12 -F 256 {output.bam} > {output.unmapped}
+
+        echo "== Sorting BAM =="
+        samtools sort -n -m 5G -@ {threads} {output.unmapped} -o {output.sorted}
+
+        echo "== Converting BAM to FASTQ =="
+        samtools fastq -@ {threads} \
+         -0 {output.singleton_clean} -s /dev/null -n {output.sorted}
 
         echo "== Done =="
         ) > {log} 2>&1

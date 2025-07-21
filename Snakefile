@@ -37,8 +37,8 @@ rule all:
         "snakestream/stats/seqkit_raw_reads.tsv",
         "snakestream/stats/seqkit_trimmed_reads.tsv",
         "snakestream/stats/seqkit_cleaned_reads.tsv",
-#        expand("snakestream/assembly_megahit_genome/Milk/{sample}/{sample}.contigs.fa",sample=BIOME_TO_SAMPLE["Milk"]),
-#        expand("snakestream/assembly_megahit_genome/Sewage/{sample}/{sample}.contigs.fa",sample=BIOME_TO_SAMPLE["Sewage"]),
+        expand("snakestream/assembly_megahit_genome/Milk/{sample}/{sample}.contigs.fa",sample=BIOME_TO_SAMPLE["Milk"]),
+        expand("snakestream/assembly_megahit_genome/Sewage/{sample}/{sample}.contigs.fa",sample=BIOME_TO_SAMPLE["Sewage"]),
     resources:
         mem_mb=1000,
         qos="normal",

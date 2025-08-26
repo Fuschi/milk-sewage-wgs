@@ -70,7 +70,8 @@ rule coassembly_megahit_genome:
         qos="normal",
         mem_mb=192000,
         time=1000,
-        **default_resources()
+        requeue=1,
+        trigger=1
     shell:
         """
         mkdir -p {params.tmp_dir}

@@ -28,7 +28,7 @@ rule assembly_megahit_genome:
     resources:
         qos="normal",
         mem_mb=32000,
-        time=240,
+        time=420,
         **default_resources()
     shell:
         """
@@ -47,9 +47,9 @@ rule assembly_megahit_genome:
 ##NOT WORIKING
 rule coassembly_megahit_genome:
     input:
-        r1_clean=lambda wildcards: expand("snakestream/reads_clean/{sample}_R1.clean.fastq.gz",sample=BIOME_TO_SAMPLE[wildcards.sample_type]),
-        r2_clean=lambda wildcards: expand("snakestream/reads_clean/{sample}_R2.clean.fastq.gz",sample=BIOME_TO_SAMPLE[wildcards.sample_type]),
-        sing_clean=lambda wildcards: expand("snakestream/reads_clean/{sample}_sing.clean.fastq.gz",sample=BIOME_TO_SAMPLE[wildcards.sample_type]),
+        r1_clean=lambda wildcards: expand("snakestream/reads_clean/{sample}_R1_clean.fastq.gz",sample=BIOME_TO_SAMPLE[wildcards.sample_type]),
+        r2_clean=lambda wildcards: expand("snakestream/reads_clean/{sample}_R2_clean.fastq.gz",sample=BIOME_TO_SAMPLE[wildcards.sample_type]),
+        sing_clean=lambda wildcards: expand("snakestream/reads_clean/{sample}_sing_clean.fastq.gz",sample=BIOME_TO_SAMPLE[wildcards.sample_type]),
     output:
         contigs=protected("snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa")
     params:
@@ -58,7 +58,7 @@ rule coassembly_megahit_genome:
         temp_R1=temp("snakestream/coassembly_megahit_genome/tmp/{sample_type}/all_R1.fastq.gz"),
         temp_R2=temp("snakestream/coassembly_megahit_genome/tmp/{sample_type}/all_R2.fastq.gz"),
         temp_sing=temp("snakestream/coassembly_megahit_genome/tmp/{sample_type}/all_sing.fastq.gz"),
-        contigs=temp("snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa")
+#        contigs=temp("snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa")
     conda: "megahit"
     log:
         out="logs/coassembly_megahit_genome/{sample_type}.out",
@@ -89,6 +89,5 @@ rule coassembly_megahit_genome:
             -r {params.temp_sing} \
             -o {params.dir_out}
         rm -rf {params.tmp_dir}
-        mv {params.contigs} {output.contigs}
         """
 #--------------------------------------------------------------------------------------#

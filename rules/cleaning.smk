@@ -138,7 +138,7 @@ rule remove_host:
 # ─────────────────────────────────────────────────────────────
 rule remove_host_sing:
     input:
-        singleton = protected("snakestream/reads_trim/{sample}_sing.fastq.gz"),
+        singleton = "snakestream/reads_trim/{sample}_sing.fastq.gz",
         index_check = "snakestream/host/bosTau9.1.bt2"
     output:
         singleton_clean = protected("snakestream/reads_clean/{sample}_sing_clean.fastq.gz"),

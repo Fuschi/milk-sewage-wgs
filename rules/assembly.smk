@@ -58,7 +58,7 @@ rule coassembly_megahit_genome:
         temp_R1=temp("snakestream/coassembly_megahit_genome/tmp/{sample_type}/all_R1.fastq.gz"),
         temp_R2=temp("snakestream/coassembly_megahit_genome/tmp/{sample_type}/all_R2.fastq.gz"),
         temp_sing=temp("snakestream/coassembly_megahit_genome/tmp/{sample_type}/all_sing.fastq.gz"),
-#        contigs=temp("snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa")
+        contigs=temp("snakestream/coassembly_megahit_genome/{sample_type}/final.contigs.fa")
     conda: "megahit"
     log:
         out="logs/coassembly_megahit_genome/{sample_type}.out",
@@ -68,8 +68,8 @@ rule coassembly_megahit_genome:
     threads: 64
     resources:
         qos="normal",
-        mem_mb=192000,
-        time=1000,
+        mem_mb=900000,
+        time=1430,
         requeue=1,
         trigger=1
     shell:
@@ -90,5 +90,6 @@ rule coassembly_megahit_genome:
             -r {params.temp_sing} \
             -o {params.dir_out}
         rm -rf {params.tmp_dir}
+        mv {params.contigs} {output.contigs}
         """
 #--------------------------------------------------------------------------------------#

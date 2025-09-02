@@ -44,20 +44,46 @@ rule assembly_megahit_genome:
         mv {params.contigs} {output.contigs}
         """
 #--------------------------------------------------------------------------------------#
-##NOT WORIKING
-rule coassembly_megahit_genome:
+rule reads_concatenation:
     input:
         r1_clean=lambda wildcards: expand("snakestream/reads_clean/{sample}_R1_clean.fastq.gz",sample=BIOME_TO_SAMPLE[wildcards.sample_type]),
         r2_clean=lambda wildcards: expand("snakestream/reads_clean/{sample}_R2_clean.fastq.gz",sample=BIOME_TO_SAMPLE[wildcards.sample_type]),
         sing_clean=lambda wildcards: expand("snakestream/reads_clean/{sample}_sing_clean.fastq.gz",sample=BIOME_TO_SAMPLE[wildcards.sample_type]),
     output:
+        conc_R1="snakestream/coassembly_megahit_genome/conc_reads/{sample_type}/all_R1.fastq.gz",
+        conc_R2="snakestream/coassembly_megahit_genome/conc_reads/{sample_type}/all_R2.fastq.gz",
+        conc_sing="snakestream/coassembly_megahit_genome/conc_reads/{sample_type}/all_sing.fastq.gz",
+    conda: "megahit"
+    log:
+        out="logs/reads_concatenation/{sample_type}.out",
+        err="logs/reads_concatenation/{sample_type}.err"
+    benchmark:
+        "benchmarks/reads_concatenation/{sample_type}.txt"
+    threads: 32
+    resources:
+        qos="normal",
+        mem_mb=500000,
+        time=1430,
+        **default_resources()
+    shell:
+        """
+        cat {input.r1_clean} | gzip -c > {output.conc_R1}
+
+        cat {input.r2_clean} | gzip -c > {output.conc_R2}
+
+        cat {input.sing_clean} | gzip -c > {output.conc_sing}
+        """
+##NOT WORIKING
+#--------------------------------------------------------------------------------------#
+rule coassembly_megahit_genome:
+    input:
+        conc_R1="snakestream/coassembly_megahit_genome/conc_reads/{sample_type}/all_R1.fastq.gz",
+        conc_R2="snakestream/coassembly_megahit_genome/conc_reads/{sample_type}/all_R2.fastq.gz",
+        conc_sing="snakestream/coassembly_megahit_genome/conc_reads/{sample_type}/all_sing.fastq.gz",
+    output:
         contigs=protected("snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa")
     params:
         dir_out="snakestream/coassembly_megahit_genome/{sample_type}",
-        tmp_dir=temp("snakestream/coassembly_megahit_genome/tmp/{sample_type}"),
-        temp_R1=temp("snakestream/coassembly_megahit_genome/tmp/{sample_type}/all_R1.fastq.gz"),
-        temp_R2=temp("snakestream/coassembly_megahit_genome/tmp/{sample_type}/all_R2.fastq.gz"),
-        temp_sing=temp("snakestream/coassembly_megahit_genome/tmp/{sample_type}/all_sing.fastq.gz"),
         contigs=temp("snakestream/coassembly_megahit_genome/{sample_type}/final.contigs.fa")
     conda: "megahit"
     log:
@@ -67,29 +93,19 @@ rule coassembly_megahit_genome:
         "benchmarks/coassembly_megahit_genome/{sample_type}.txt"
     threads: 64
     resources:
-        qos="normal",
-        mem_mb=900000,
+        qos="long",
+        mem_mb=1000000,
         time=1430,
         requeue=1,
         trigger=1
     shell:
         """
-        mkdir -p {params.tmp_dir}
-        rm -rf {params.dir_out}
-        cat {input.r1_clean} > {params.temp_R1}
-
-        cat {input.r2_clean} > {params.temp_R2}
-
-        cat {input.sing_clean} > {params.temp_sing}
-
         megahit \
             -t {threads} \
             --verbose \
-            --min-contig-len 1000 \
-            -1 {params.temp_R1} -2 {params.temp_R2} \
-            -r {params.temp_sing} \
+            -1 {input.conc_R1} -2 {input.conc_R2} \
+            -r {input.conc_sing} \
             -o {params.dir_out}
-        rm -rf {params.tmp_dir}
         mv {params.contigs} {output.contigs}
         """
 #--------------------------------------------------------------------------------------#

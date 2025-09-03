@@ -5,7 +5,7 @@
 #SBATCH --partition=m8
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=64
-#SBATCH --mem=100G
+#SBATCH --mem=900G
 #SBATCH --time=72:00:00
 #SBATCH --requeue
 #SBATCH --job-name=coassembly

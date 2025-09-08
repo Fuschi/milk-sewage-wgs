@@ -1,6 +1,6 @@
 # rules/binnign_assembly.smk
 # ─────────────────────────────────────────────
-# Binning for assemblye conting rules:
+# Binning for assembly conting rules:
 # ─────────────────────────────────────────────
 #Generic Resources
 def default_resources():

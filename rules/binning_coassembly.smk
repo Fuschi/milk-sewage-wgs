@@ -1,6 +1,6 @@
 # rules/binning_coassembly.smk
 # ─────────────────────────────────────────────
-# Binninf for Coassembly contigs rules:
+# Binning for Coassembly contigs rules:
 # ─────────────────────────────────────────────
 #Generic Resources
 def default_resources():

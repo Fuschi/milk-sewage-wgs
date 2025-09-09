@@ -26,6 +26,8 @@ def default_resources():
 include: "rules/cleaning.smk"
 include: "rules/stats_reads.smk"
 include: "rules/assembly.smk"
+include: "rules/binning_assembly.smk"
+include: "rules/binning_coassembly.smk"
 # ─────────────────────────────────────────────────────────────
 # FINAL TARGETS
 # ─────────────────────────────────────────────────────────────

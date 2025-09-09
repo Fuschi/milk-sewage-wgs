@@ -33,7 +33,6 @@ rule map_bbmap_assembly:
             bbmap.sh \
             in1={input.r1_clean} \
             in2={input.r2_clean} \
-            in={input.sing_clean} \
             ref={input.contigs} \
             outm={output.outsam} \
             minid=0.90 \

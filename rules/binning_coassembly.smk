@@ -33,7 +33,6 @@ rule map_bbmap_coassembly:
             bbmap.sh \
             in1={input.conc_R1} \
             in2={input.conc_R2} \
-            in={input.conc_sing} \
             ref={input.contigs} \
             outm={output.outsam} \
             minid=0.90 \

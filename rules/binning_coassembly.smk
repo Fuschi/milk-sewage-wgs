@@ -16,7 +16,7 @@ rule map_bbmap_coassembly:
         conc_sing="snakestream/coassembly_megahit_genome/conc_reads/{sample_type}/all_sing.fastq.gz",
         contigs="snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa"
     output:
-        outsam="snakestram/map_bbmap/coassembly/{sample_type}.sam",
+        outsam="snakestream/map_bbmap/coassembly/{sample_type}.sam",
     conda: "bbmap"
     log:
         "logs/map_bbmap/coassembly/{sample_type}.log"
@@ -43,7 +43,7 @@ rule map_bbmap_coassembly:
 #----------------------------------------------------------------------------------------#
 rule sort_samtools_coassembly:
     input:
-        sam="snakestram/map_bbmap/coassembly/{sample_type}.sam"
+        sam="snakestream/map_bbmap/coassembly/{sample_type}.sam"
     output:
         bam="snakestream/sort_samtools/coassembly/{sample_type}.bam"
     log:
@@ -87,7 +87,7 @@ rule summarize_depths_coassembly:
 #----------------------------------------------------------------------------------------#
 rule binning_metabat_coassembly:
     input:
-        contigs="snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa"
+        contigs="snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa",
         dep="snakestream/coverage/coassembly/{sample_type}.txt"
     output:
         bin="snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.1.fa",
@@ -122,8 +122,8 @@ rule assessment_checkm2_coassembly:
     output:
         report = "snakestream/checkm2/coassembly/{sample_type}/{sample_type}_quality_report.tsv"
     params:
-        bins_dir = dir_out="snakestream/binning_metabat/coassembly/{sample_type}",
-        dir_out = "snakesteram/checkm2/coassembly/{sample_type}/",
+        bins_dir = "snakestream/binning_metabat/coassembly/{sample_type}",
+        dir_out = "snakestream/checkm2/coassembly/{sample_type}/",
         report = "snakestream/checkm2/coassembly/{sample_type}/quality_report.tsv"
     conda:
         "checkm2"

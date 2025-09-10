@@ -16,7 +16,7 @@ rule map_bbmap_assembly:
         sing_clean="snakestream/reads_clean/{sample}_sing_clean.fastq.gz",
         contigs="snakestream/assembly_megahit_genome/{sample_type}/{sample}/{sample}.contigs.fa"
     output:
-        outsam="snakestram/map_bbmap/assembly/{sample_type}/{sample}.sam",
+        outsam="snakestream/map_bbmap/assembly/{sample_type}/{sample}.sam",
     conda: "bbmap"
     log:
         "logs/map_bbmap/assembly/{sample_type}/{sample}.log"
@@ -45,7 +45,7 @@ rule map_bbmap_assembly:
 #----------------------------------------------------------------------------------------#
 rule sort_samtools_assembly:
     input:
-        sam="snakestram/map_bbmap/assembly/{sample_type}/{sample}.sam"
+        sam="snakestream/map_bbmap/assembly/{sample_type}/{sample}.sam"
     output:
         bam="snakestream/sort_samtools/assembly/{sample_type}/{sample}.bam"
     log:
@@ -125,7 +125,7 @@ rule assessment_checkm2_assembly:
         report = "snakestream/checkm2/assembly/{sample_type}/{sample}/{sample}_quality_report.tsv"
     params:
         bins_dir = "snakestream/binning_metabat/assembly/{sample_type}/{sample}",
-        dir_out = "snakesteram/checkm2/assembly/{sample_type}/{sample}",
+        dir_out = "snakestream/checkm2/assembly/{sample_type}/{sample}",
         report = "snakestream/checkm2/assembly/{sample_type}/{sample}/quality_report.tsv"
     conda:
         "checkm2"

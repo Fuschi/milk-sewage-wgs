@@ -115,6 +115,7 @@ rule binning_metabat_assembly:
         -a {input.dep} \
         -o {params.dir_out}/{wildcards.sample}_bin \
         -m 1500
+        > {log} 2>&1
         """
  
 #----------------------------------------------------------------------------------------#

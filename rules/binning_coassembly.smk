@@ -113,6 +113,7 @@ rule binning_metabat_coassembly:
         -a {input.dep} \
         -o {params.dir_out}/{wildcards.sample_type}_bin \
         -m 1500
+        > {log} 2>&1
         """
 
 #----------------------------------------------------------------------------------------#

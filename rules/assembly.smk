@@ -36,7 +36,6 @@ rule assembly_megahit_genome:
         megahit \
         -t {threads} \
         --verbose \
-        --min-contig-len 1000 \
         -1 {input.r1_clean} -2 {input.r2_clean} \
         -r {input.sing_clean}\
         -o {params.dir_out} \

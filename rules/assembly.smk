@@ -99,12 +99,8 @@ rule coassembly_megahit_genome:
         trigger=1
     shell:
         """
-        megahit \
-            -t {threads} \
-            --verbose \
-            -1 {input.conc_R1} -2 {input.conc_R2} \
-            -r {input.conc_sing} \
-            -o {params.dir_out}
-        mv {params.contigs} {output.contigs}
+        if [ ! -f {output.contigs} ] then 
+           echo "Coassembly output not found launch coassembly.sh" > {log.out} 
+        fi
         """
 #--------------------------------------------------------------------------------------#

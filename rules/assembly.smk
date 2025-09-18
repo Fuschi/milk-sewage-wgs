@@ -86,13 +86,13 @@ rule coassembly_megahit_genome:
         contigs=temp("snakestream/coassembly_megahit_genome/{sample_type}/final.contigs.fa")
     conda: "megahit"
     log:
-        out="logs/coassembly_megahit_genome/{sample_type}.out",
-        err="logs/coassembly_megahit_genome/{sample_type}.err"
+        out="logs/coassembly_megahit_genome/{sample_type}_snakemake.out",
+        err="logs/coassembly_megahit_genome/{sample_type}_snakemake.err"
     benchmark:
         "benchmarks/coassembly_megahit_genome/{sample_type}.txt"
     threads: 64
     resources:
-        qos="long",
+        qos="normal",
         mem_mb=1000000,
         time=1430,
         requeue=1,

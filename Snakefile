@@ -4,7 +4,7 @@
 import pandas as pd
 
 # Read metadata table
-samples = pd.read_csv("config/sample_metadata_dummy.tsv", sep="\t")
+samples = pd.read_csv("config/sample_metadata.tsv", sep="\t")
 
 # Extract sample info
 SAMPLES = samples["sample_id"].tolist()
@@ -42,13 +42,13 @@ rule all:
         "snakestream/stats/seqkit_cleaned_reads_sing.tsv",
         expand("snakestream/assembly_megahit_genome/Milk/{sample}/{sample}.contigs.fa",sample=BIOME_TO_SAMPLE["Milk"]),
         expand("snakestream/assembly_megahit_genome/Sewage/{sample}/{sample}.contigs.fa",sample=BIOME_TO_SAMPLE["Sewage"]),
-        #expand("snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa", sample_type=list(BIOME_TO_SAMPLE.keys())),
-        expand("snakestream/binning_metabat/assembly/Milk/{sample}/{sample}_bin.1.fa", sample=BIOME_TO_SAMPLE["Milk"]),
+        expand("snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa", sample_type=list(BIOME_TO_SAMPLE.keys())),
+        expand("snakestream/binning_metabat/assembly/Milk/{sample}/{sample}_bin.BinInfo.txt", sample=BIOME_TO_SAMPLE["Milk"]),
         expand("snakestream/checkm2/assembly/Milk/{sample}/{sample}_quality_report.tsv", sample=BIOME_TO_SAMPLE["Milk"]),
-        expand("snakestream/binning_metabat/assembly/Sewage/{sample}/{sample}_bin.1.fa", sample=BIOME_TO_SAMPLE["Sewage"]),
+        expand("snakestream/binning_metabat/assembly/Sewage/{sample}/{sample}_bin.BinInfo.txt", sample=BIOME_TO_SAMPLE["Sewage"]),
         expand("snakestream/checkm2/assembly/Sewage/{sample}/{sample}_quality_report.tsv", sample=BIOME_TO_SAMPLE["Sewage"]),
-        #expand("snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.1.fa", sample_type=list(BIOME_TO_SAMPLE.keys()))),
-        #expand("snakestream/checkm2/coassembly/{sample_type}/{sample_type}_quality_report.tsv", sample_type=list(BIOME_TO_SAMPLE.keys()))),
+        expand("snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.BinInfo.txt", sample_type=list(BIOME_TO_SAMPLE.keys())),
+        expand("snakestream/checkm2/coassembly/{sample_type}/{sample_type}_quality_report.tsv", sample_type=list(BIOME_TO_SAMPLE.keys())),
 
     resources:
         mem_mb=1000,

@@ -65,7 +65,7 @@ rule sort_samtools_coassembly:
 #----------------------------------------------------------------------------------------#
 rule summarize_depths_coassembly:
     input:
-        bam="snakestream/sort_samtools/assembly/{sample_type}.bam"
+        bam="snakestream/sort_samtools/coassembly/{sample_type}.bam"
     output:
         dep="snakestream/coverage/coassembly/{sample_type}.txt"
     conda:
@@ -90,7 +90,7 @@ rule binning_metabat_coassembly:
         contigs="snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa",
         dep="snakestream/coverage/coassembly/{sample_type}.txt"
     output:
-        bin="snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.1.fa",
+        bin="snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.BinInfo.txt",
     params:
         dir_out="snakestream/binning_metabat/coassembly/{sample_type}",
     conda: "metabat"
@@ -119,7 +119,7 @@ rule binning_metabat_coassembly:
 #----------------------------------------------------------------------------------------#
 rule assessment_checkm2_coassembly:
     input:
-        bin="snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.1.fa"
+        bin="snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.BinInfo.txt"
     output:
         report = "snakestream/checkm2/coassembly/{sample_type}/{sample_type}_quality_report.tsv"
     params:

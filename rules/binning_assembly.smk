@@ -92,7 +92,7 @@ rule binning_metabat_assembly:
         contigs="snakestream/assembly_megahit_genome/{sample_type}/{sample}/{sample}.contigs.fa",
         dep="snakestream/coverage/assembly/{sample_type}/{sample}.txt"
     output:
-        bin="snakestream/binning_metabat/assembly/{sample_type}/{sample}/{sample}_bin.1.fa",
+        bin="snakestream/binning_metabat/assembly/{sample_type}/{sample}/{sample}_bin.BinInfo.txt",
     params:
         dir_out="snakestream/binning_metabat/assembly/{sample_type}/{sample}",
     conda: "metabat"
@@ -121,7 +121,7 @@ rule binning_metabat_assembly:
 #----------------------------------------------------------------------------------------#
 rule assessment_checkm2_assembly:
     input:
-        bin="snakestream/binning_metabat/assembly/{sample_type}/{sample}/{sample}_bin.1.fa"
+        bin="snakestream/binning_metabat/assembly/{sample_type}/{sample}/{sample}_bin.BinInfo.txt"
     output:
         report = "snakestream/checkm2/assembly/{sample_type}/{sample}/{sample}_quality_report.tsv"
     params:

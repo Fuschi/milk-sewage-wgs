@@ -99,7 +99,7 @@ rule coassembly_megahit_genome:
         trigger=1
     shell:
         """
-        if [ ! -f {output.contigs} ] then 
+        if [ ! -f {output.contigs} ]; then 
            echo "Coassembly output not found launch coassembly.sh" > {log.out} 
         fi
         """

@@ -72,35 +72,27 @@ rule reads_concatenation:
 
         cat {input.sing_clean} | gzip -c > {output.conc_sing}
         """
-##NOT WORIKING
 #--------------------------------------------------------------------------------------#
-rule coassembly_megahit_genome:
-    input:
-        conc_R1="snakestream/coassembly_megahit_genome/conc_reads/{sample_type}/all_R1.fastq.gz",
-        conc_R2="snakestream/coassembly_megahit_genome/conc_reads/{sample_type}/all_R2.fastq.gz",
-        conc_sing="snakestream/coassembly_megahit_genome/conc_reads/{sample_type}/all_sing.fastq.gz",
+rule check_coassembly_megahit_genome:
     output:
-        contigs=protected("snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa")
-    params:
-        dir_out="snakestream/coassembly_megahit_genome/{sample_type}",
-        contigs=temp("snakestream/coassembly_megahit_genome/{sample_type}/final.contigs.fa")
-    conda: "megahit"
+        contigs="snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa"
     log:
         out="logs/coassembly_megahit_genome/{sample_type}_snakemake.out",
         err="logs/coassembly_megahit_genome/{sample_type}_snakemake.err"
     benchmark:
         "benchmarks/coassembly_megahit_genome/{sample_type}.txt"
-    threads: 64
+    threads: 32
     resources:
         qos="normal",
-        mem_mb=1000000,
+        mem_mb=10000,
         time=1430,
         requeue=1,
         trigger=1
     shell:
-        """
-        if [ ! -f {output.contigs} ]; then 
-           echo "Coassembly output not found launch coassembly.sh" > {log.out} 
-        fi
-        """
+    """
+    {
+        test -f {output} || (echo 'File mancante: {output}' && exit 1)
+    } > {log.out} 2> {log.err}
+    """
+
 #--------------------------------------------------------------------------------------#

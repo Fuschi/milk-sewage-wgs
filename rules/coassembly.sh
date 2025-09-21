@@ -41,7 +41,7 @@ LOG="logs/coassembly_megahit_genome/${BIOME}.log"
 # Lancio Megahit
 srun megahit \
     -t 64 \
-    --memory 100000 \
+    --memory 8500000 \
     --verbose \
     -1 "$R1" \
     -2 "$R2" \

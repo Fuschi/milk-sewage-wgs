@@ -123,7 +123,7 @@ rule assessment_checkm2_assembly:
     input:
         bin="snakestream/binning_metabat/assembly/{sample_type}/{sample}/{sample}_bin.BinInfo.txt"
     output:
-        report = "snakestream/checkm2/assembly/{sample_type}/{sample}/{sample}_quality_report.tsv"
+        log = "snakestream/checkm2/assembly/{sample_type}/checkm2.log"
     params:
         bins_dir = "snakestream/binning_metabat/assembly/{sample_type}/{sample}",
         dir_out = "snakestream/checkm2/assembly/{sample_type}/{sample}",
@@ -151,7 +151,6 @@ rule assessment_checkm2_assembly:
                --threads {threads} \
                --database_path databases/CheckM2_database/uniref100.KO.1.dmnd \
                > {log} 2>&1
-        mv {params.report} {output.report}
        """
 #----------------------------------------------------------------------------------------#
 

@@ -44,9 +44,9 @@ rule all:
         expand("snakestream/assembly_megahit_genome/Sewage/{sample}/{sample}.contigs.fa",sample=BIOME_TO_SAMPLE["Sewage"]),
         expand("snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa", sample_type=list(BIOME_TO_SAMPLE.keys())),
         expand("snakestream/binning_metabat/assembly/Milk/{sample}/{sample}_bin.BinInfo.txt", sample=BIOME_TO_SAMPLE["Milk"]),
-        expand("snakestream/checkm2/assembly/Milk/{sample}/{sample}_quality_report.tsv", sample=BIOME_TO_SAMPLE["Milk"]),
+        expand("snakestream/checkm2/assembly/Milk/{sample}/checkm2.log", sample=BIOME_TO_SAMPLE["Milk"]),
         expand("snakestream/binning_metabat/assembly/Sewage/{sample}/{sample}_bin.BinInfo.txt", sample=BIOME_TO_SAMPLE["Sewage"]),
-        expand("snakestream/checkm2/assembly/Sewage/{sample}/{sample}_quality_report.tsv", sample=BIOME_TO_SAMPLE["Sewage"]),
+        expand("snakestream/checkm2/assembly/Sewage/{sample}/checkm2.log", sample=BIOME_TO_SAMPLE["Sewage"]),
         expand("snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.BinInfo.txt", sample_type=list(BIOME_TO_SAMPLE.keys())),
         expand("snakestream/checkm2/coassembly/{sample_type}/{sample_type}_quality_report.tsv", sample_type=list(BIOME_TO_SAMPLE.keys())),
 

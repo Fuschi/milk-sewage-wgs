@@ -123,7 +123,7 @@ rule assessment_checkm2_assembly:
     input:
         bin="snakestream/binning_metabat/assembly/{sample_type}/{sample}/{sample}_bin.BinInfo.txt"
     output:
-        log = "snakestream/checkm2/assembly/{sample_type}/checkm2.log"
+        log = "snakestream/checkm2/assembly/{sample_type}/{sample}/checkm2.log"
     params:
         bins_dir = "snakestream/binning_metabat/assembly/{sample_type}/{sample}",
         dir_out = "snakestream/checkm2/assembly/{sample_type}/{sample}",

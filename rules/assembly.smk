@@ -75,7 +75,7 @@ rule reads_concatenation:
 #--------------------------------------------------------------------------------------#
 rule check_coassembly_megahit_genome:
     output:
-        contigs="snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa"
+        contigs=touch("snakestream/coassembly_megahit_genome/{sample_type}/coassembly.final.contigs.fa")
     log:
         out="logs/coassembly_megahit_genome/{sample_type}_snakemake.out",
         err="logs/coassembly_megahit_genome/{sample_type}_snakemake.err"
@@ -89,10 +89,9 @@ rule check_coassembly_megahit_genome:
         requeue=1,
         trigger=1
     shell:
-    """
-    {
-        test -f {output} || (echo 'File mancante: {output}' && exit 1)
-    } > {log.out} 2> {log.err}
-    """
+        """
+        test -f {output} || (echo 'File mancante: {output}' && exit 1) \
+            > {log.out} 2> {log.err}
+        """
 
 #--------------------------------------------------------------------------------------#

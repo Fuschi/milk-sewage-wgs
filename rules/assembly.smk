@@ -66,11 +66,11 @@ rule reads_concatenation:
         **default_resources()
     shell:
         """
-        cat {input.r1_clean} | gzip -c > {output.conc_R1}
+        zcat {input.r1_clean} | gzip -c > {output.conc_R1}
 
-        cat {input.r2_clean} | gzip -c > {output.conc_R2}
+        zcat {input.r2_clean} | gzip -c > {output.conc_R2}
 
-        cat {input.sing_clean} | gzip -c > {output.conc_sing}
+        zcat {input.sing_clean}| gzip -c > {output.conc_sing}
         """
 #--------------------------------------------------------------------------------------#
 rule check_coassembly_megahit_genome:

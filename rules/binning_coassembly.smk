@@ -22,11 +22,11 @@ rule map_bbmap_coassembly:
         "logs/map_bbmap/coassembly/{sample_type}.log"
     benchmark:
         "benchmarks/map_bbmap/coassembly/{sample_type}.txt"
-    threads: 20
+    threads: 64
     resources:
         qos="normal",
-        mem_mb=32000,
-        time=240,
+        mem_mb=500000,
+        time=1430,
         **default_resources()
     shell:
             '''
@@ -51,15 +51,15 @@ rule sort_samtools_coassembly:
     conda:"samtools"
     benchmark:
         "benchmarks/sort_samtools/coassembly/{sample_type}.txt"
-    threads: 4
+    threads: 32
     resources:
         qos="normal",
-        mem_mb=32000,
-        time=240,
+        mem_mb=700000,
+        time=1430,
         **default_resources()
     shell:
         """
-        samtools sort -m 20G -@ {threads} -o {output.bam} {input.sam} > {log} 2>&1
+        samtools view -@ {threads} -bS {input.sam} | samtools sort -m 20G -@ {threads} -o {output.bam} > {log} 2>&1
         """
 
 #----------------------------------------------------------------------------------------#
@@ -98,11 +98,11 @@ rule binning_metabat_coassembly:
         "logs/binning_metabat/coassembly/{sample_type}.log"
     benchmark:
         "benchmarks/binning_metabat/coassembly/{sample_type}.txt"
-    threads: 8
+    threads: 32
     resources:
         qos="normal",
         mem_mb=32000,
-        time=240,
+        time=1430,
         **default_resources()
     shell:
         """

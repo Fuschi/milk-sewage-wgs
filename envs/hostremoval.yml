@@ -43,4 +43,4 @@ dependencies:
   - tk=8.6.13=noxft_hd72426e_102
   - tzdata=2025b=h78e105d_0
   - zstd=1.5.7=hb8e6e7a_2
-prefix: /home/PERSONALE/alessandro.fuschi2/miniforge3/envs/hostremoval
+

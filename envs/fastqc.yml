@@ -5,4 +5,4 @@ channels:
 dependencies:
   - fastqc=0.11.5=1
   - java-jdk=8.0.92=1
-prefix: /home/PERSONALE/alessandro.fuschi2/miniforge3/envs/fastqc
+

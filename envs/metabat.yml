@@ -1,0 +1,6 @@
+name: metabat
+channels:
+- bioconda
+dependencies:
+  - metabat2
+

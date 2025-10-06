@@ -5,4 +5,4 @@ channels:
 dependencies:
   - bbmap=36.32=0
   - java-jdk=8.0.92=1
-prefix: /home/PERSONALE/alessandro.fuschi2/miniforge3/envs/bbmap
+

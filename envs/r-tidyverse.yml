@@ -1,0 +1,6 @@
+name: r-tidyverse
+channels:
+- conda-forge
+dependencies:
+  - r-tidyverse
+

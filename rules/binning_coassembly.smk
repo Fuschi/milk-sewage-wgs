@@ -1,5 +1,6 @@
 # rules/binning_coassembly.smk
 # ─────────────────────────────────────────────
+import glob
 # Binning for Coassembly contigs rules:
 # ─────────────────────────────────────────────
 #Generic Resources
@@ -152,3 +153,57 @@ rule assessment_checkm2_coassembly:
         mv {params.report} {output.report}
        """
 #----------------------------------------------------------------------------------------#
+rule merge_checkm2_reports_coassembly:
+    input:
+        report = "snakestream/checkm2/coassembly/{sample_type}/{sample_type}_quality_report.tsv"
+    output:
+        tables="snakestream/tables/coassembly/{sample_type}/checkm2_reports_for_dRep.csv"
+    resources:
+        qos="normal",
+        mem_mb=32000,
+        time=120
+    conda:
+        "r-tidyverse"
+    script:
+        "scripts/merge_checkm2_reports_coassembly.R"
+
+
+#----------------------------------------------------------------------------------------#
+rule dereplicate_genomes_assembly:
+    input:
+          bins="snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.BinInfo.txt",
+          checkm2_table="snakestream/tables/coassembly/{sample_type}/checkm2_reports_for_dRep.csv"
+    output:
+        "snakestream/dereplicated_genome/coassembly/{sample_type}/figures/Winning_genomes.pdf"
+    params:
+        dir_out=lambda wildcards: f"snakestream/dereplicated_genome/coassembly/{wildcards.sample_type}/",
+        bins=lambda wildcards: sorted(glob(f"snakestream/binning_metabat/coassembly/{wildcards.sample_type}/*.fa"))
+    conda:
+        "drep"
+    log:
+        "logs/dereplicate_genomes/coassembly/{sample_type}.log"
+    threads: 8
+    resources:
+        qos="normal",
+        mem_mb=32000,
+        time=120
+    shell:
+        """
+        mkdir -p {params.dir_out}/genomes
+
+        for bin in {params.bins}; do
+            bin_name=$(basename "$bin" .fa)
+            cp "$bin" {params.dir_out}/genomes/${{bin_name}}.fasta
+
+        done
+
+        [ -d {params.dir_out}/data_tables ] && rm -rf {params.dir_out}/data_tables
+
+        dRep dereplicate {params.dir_out} \
+            -g {params.dir_out}/genomes/*.fasta \
+            --genomeInfo {input.checkm2_table} \
+            -p {threads} \
+            > {log} 2>&1
+
+        rm -r {params.dir_out}/genomes
+        """

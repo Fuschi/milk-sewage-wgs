@@ -2,9 +2,9 @@
 # CONFIGURATION
 # ─────────────────────────────────────────────────────────────
 import pandas as pd
-
+import glob
 # Read metadata table
-samples = pd.read_csv("config/sample_metadata.tsv", sep="\t")
+samples = pd.read_csv("config/sample_metadata_dummy.tsv", sep="\t")
 
 # Extract sample info
 SAMPLES = samples["sample_id"].tolist()
@@ -49,7 +49,8 @@ rule all:
         expand("snakestream/checkm2/assembly/Sewage/{sample}/checkm2.log", sample=BIOME_TO_SAMPLE["Sewage"]),
         expand("snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.BinInfo.txt", sample_type=list(BIOME_TO_SAMPLE.keys())),
         expand("snakestream/checkm2/coassembly/{sample_type}/{sample_type}_quality_report.tsv", sample_type=list(BIOME_TO_SAMPLE.keys())),
-
+        expand("snakestream/tables/assembly/{sample_type}/checkm2_reports_for_dRep.csv", sample_type=list([BIOME_TO_SAMPLE.keys())),
+ù      expand("snakestream/dereplicated_genome/assembly/{sample_type}/figures/Winning_genomes.pdf",sample_type=list(BIOME_TO_SAMPLE.keys())),
     resources:
         mem_mb=1000,
         qos="normal",

@@ -156,31 +156,32 @@ rule assessment_checkm2_assembly:
 #----------------------------------------------------------------------------------------#
 rule merge_checkm2_reports_assembly:
     input:
-        log = lambda wildcards: sorted(glob(f"snakestream/checkm2/assembly/{wildcards.sample_type}/*/checkm2.log"))
+        log = lambda wildcards: sorted(glob.glob(f"snakestream/checkm2/assembly/{wildcards.sample_type}/*/checkm2.log"))
     output:
         tables="snakestream/tables/assembly/{sample_type}/checkm2_reports_for_dRep.csv"
     params:
-        reports= lambda wildcards: sorted(glob(f"snakestream/checkm2/assembly/{wildcards.sample_type}/*/quality_report.tsv"))
+        reports= lambda wildcards: sorted(glob.glob(f"snakestream/checkm2/assembly/{wildcards.sample_type}/*/*quality_report.tsv"))
     resources:
         qos="normal",
         mem_mb=32000,
-        time=120
+        time=120,
+        **default_resources()
     conda:
         "r-tidyverse"
     script:
-        "scripts/merge_checkm2_reports_assembly.R"
+        "../scripts/merge_checkm2_reports_assembly.R"
 
 
 #----------------------------------------------------------------------------------------#
 rule dereplicate_genomes_assembly:
     input:
-          bins="snakestream/binning_metabat/assembly/{sample_type}/{sample}/{sample}_bin.BinInfo.txt",
+          bins=lambda wildcards: sorted(glob.glob(f"snakestream/binning_metabat/assembly/{wildcards.sample_type}/*/*_bin.BinInfo.txt")),
           checkm2_table="snakestream/tables/assembly/{sample_type}/checkm2_reports_for_dRep.csv"
     output:
         "snakestream/dereplicated_genome/assembly/{sample_type}/figures/Winning_genomes.pdf"
     params:
         dir_out=lambda wildcards: f"snakestream/dereplicated_genome/assembly/{wildcards.sample_type}/",
-        bins=lambda wildcards: sorted(glob(f"snakestream/binning_metabat/assembly/{wildcards.sample_type}/*/*.fa"))
+        bins=lambda wildcards: sorted(glob.glob(f"snakestream/binning_metabat/assembly/{wildcards.sample_type}/*/*.fa"))
     conda:
         "drep"
     log:
@@ -189,7 +190,8 @@ rule dereplicate_genomes_assembly:
     resources:
         qos="normal",
         mem_mb=32000,
-        time=120
+        time=120,
+        **default_resources()
     shell:
         """
         mkdir -p {params.dir_out}/genomes

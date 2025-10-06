@@ -161,15 +161,16 @@ rule merge_checkm2_reports_coassembly:
     resources:
         qos="normal",
         mem_mb=32000,
-        time=120
+        time=120,
+        **default_resources()
     conda:
         "r-tidyverse"
     script:
-        "scripts/merge_checkm2_reports_coassembly.R"
+        "../scripts/merge_checkm2_reports_coassembly.R"
 
 
 #----------------------------------------------------------------------------------------#
-rule dereplicate_genomes_assembly:
+rule dereplicate_genomes_coassembly:
     input:
           bins="snakestream/binning_metabat/coassembly/{sample_type}/{sample_type}_bin.BinInfo.txt",
           checkm2_table="snakestream/tables/coassembly/{sample_type}/checkm2_reports_for_dRep.csv"
@@ -177,7 +178,7 @@ rule dereplicate_genomes_assembly:
         "snakestream/dereplicated_genome/coassembly/{sample_type}/figures/Winning_genomes.pdf"
     params:
         dir_out=lambda wildcards: f"snakestream/dereplicated_genome/coassembly/{wildcards.sample_type}/",
-        bins=lambda wildcards: sorted(glob(f"snakestream/binning_metabat/coassembly/{wildcards.sample_type}/*.fa"))
+        bins=lambda wildcards: sorted(glob.glob(f"snakestream/binning_metabat/coassembly/{wildcards.sample_type}/*.fa"))
     conda:
         "drep"
     log:
@@ -186,7 +187,8 @@ rule dereplicate_genomes_assembly:
     resources:
         qos="normal",
         mem_mb=32000,
-        time=120
+        time=120,
+        **default_resources()
     shell:
         """
         mkdir -p {params.dir_out}/genomes

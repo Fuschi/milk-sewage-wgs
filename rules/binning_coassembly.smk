@@ -183,11 +183,11 @@ rule dereplicate_genomes_coassembly:
         "drep"
     log:
         "logs/dereplicate_genomes/coassembly/{sample_type}.log"
-    threads: 8
+    threads: 32
     resources:
         qos="normal",
         mem_mb=32000,
-        time=120,
+        time=1430,
         **default_resources()
     shell:
         """

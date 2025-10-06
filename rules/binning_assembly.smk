@@ -190,7 +190,7 @@ rule dereplicate_genomes_assembly:
     resources:
         qos="normal",
         mem_mb=32000,
-        time=120,
+        time=1430,
         **default_resources()
     shell:
         """

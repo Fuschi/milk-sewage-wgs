@@ -132,7 +132,7 @@ rule assessment_checkm2_coassembly:
     log:
        "logs/assessment_checkm2/coassembly/{sample_type}.log"
     benchmark:
-       "benchmarks/assessment_checkm2/coasssembly/{sample_type}.txt"
+       "benchmarks/assessment_checkm2/coassembly/{sample_type}.txt"
     threads: 8
     resources:
        qos="normal",

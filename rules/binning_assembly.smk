@@ -134,7 +134,7 @@ rule assessment_checkm2_assembly:
     log:
        "logs/assessment_checkm2/assembly/{sample_type}/{sample}.out"
     benchmark:
-       "benchmarks/assessment_checkm2/asssembly/{sample_type}/{sample}.txt"
+       "benchmarks/assessment_checkm2/assembly/{sample_type}/{sample}.txt"
     threads: 8
     resources:
        qos="normal",
@@ -161,6 +161,8 @@ rule merge_checkm2_reports_assembly:
         tables="snakestream/tables/assembly/{sample_type}/checkm2_reports_for_dRep.csv"
     params:
         reports= lambda wildcards: sorted(glob.glob(f"snakestream/checkm2/assembly/{wildcards.sample_type}/*/*quality_report.tsv"))
+    benchmark:
+       "benchmarks/merge_checkm2/asssembly/{sample_type}/{sample_type}.txt"
     resources:
         qos="normal",
         mem_mb=32000,
@@ -179,6 +181,8 @@ rule dereplicate_genomes_assembly:
           checkm2_table="snakestream/tables/assembly/{sample_type}/checkm2_reports_for_dRep.csv"
     output:
         "snakestream/dereplicated_genome/assembly/{sample_type}/figures/Winning_genomes.pdf"
+    benchmark:
+       "benchmarks/drep/assembly/{sample_type}/{sample_type}.txt"
     params:
         dir_out=lambda wildcards: f"snakestream/dereplicated_genome/assembly/{wildcards.sample_type}/",
         bins=lambda wildcards: sorted(glob.glob(f"snakestream/binning_metabat/assembly/{wildcards.sample_type}/*/*.fa"))

@@ -158,6 +158,8 @@ rule merge_checkm2_reports_coassembly:
         report = "snakestream/checkm2/coassembly/{sample_type}/{sample_type}_quality_report.tsv"
     output:
         tables="snakestream/tables/coassembly/{sample_type}/checkm2_reports_for_dRep.csv"
+    benchmark:
+       "benchmarks/merge_checkm2/coassembly/{sample_type}/{sample_type}.txt"
     resources:
         qos="normal",
         mem_mb=32000,
@@ -183,6 +185,8 @@ rule dereplicate_genomes_coassembly:
         "drep"
     log:
         "logs/dereplicate_genomes/coassembly/{sample_type}.log"
+    benchmark:
+       "benchmarks/drep/coassembly/{sample_type}/{sample_type}.txt"
     threads: 32
     resources:
         qos="normal",

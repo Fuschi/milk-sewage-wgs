@@ -73,19 +73,47 @@ rule dereplicate_genomes_all:
         rm -r {params.dir_out}/genomes
         """
 #----------------------------------------------------------------------------------------#
-rule coverm_relative_abundances_assembly:
+rule coverm_compatibility_mag:
     input:
-          genomes=glob.glob("snakestream/dereplicated_genome/all/dereplicated_genome/*.fasta")
-          contigs=
+        genomes=glob.glob("snakestream/dereplicated_genome/all/dereplicated_genomes/*.fasta"),
     output:
-        abundances="snakestream/relative_abundances/assembly/output_coverm_assembly.tsv"
-    params:
+        dir_out=directory("snakestream/relative_abundances/dereplicated_genomes")
     conda:
         "coverm"
     benchmark:
-       "benchmarks/coverm/all/all.txt"
+       "benchmarks/coverm_compatibility_mag/bench.txt"
     log:
-        "logs/coverm_relative_abundances/assembly/all.log"
+        "logs/coverm_compatibility_mag/log.log"
+    threads: 8
+    resources:
+        qos="normal",
+        mem_mb=32000,
+        time=1430,
+        **default_resources()
+    shell:
+        """
+        mkdir -p {output.dir_out}
+        for bin in {input.genomes}; do
+            bin_name=$(basename "$bin" .fasta)
+            cp "$bin" {output.dir_out}/${{bin_name}}.fna
+
+        done
+        """
+#----------------------------------------------------------------------------------------#
+rule coverm_relative_abundances:
+    input:
+        genomes_dir="snakestream/relative_abundances/dereplicated_genomes",
+        r1_clean = "snakestream/reads_clean/{sample}_R1_clean.fastq.gz",
+        r2_clean = "snakestream/reads_clean/{sample}_R2_clean.fastq.gz",
+        sing_clean="snakestream/reads_clean/{sample}_sing_clean.fastq.gz"
+    output:
+        abundances="snakestream/relative_abundances/{sample}_output_coverm.tsv"
+    conda:
+        "coverm"
+    benchmark:
+       "benchmarks/coverm/{sample}.txt"
+    log:
+        "logs/coverm_relative_abundances/{sample}.log"
     threads: 8
     resources:
         qos="normal",
@@ -95,9 +123,10 @@ rule coverm_relative_abundances_assembly:
     shell:
         """
         coverm genome \
-        --coupled sample_1.1.fq.gz sample_1.2.fq.gz \
-        --genome-fasta-files {input.genomes} \
+        --coupled {input.r1_clean} {input.r2_clean} \
+        --genome-fasta-directory {input.genomes_dir} \
+        --single {input.sing_clean} \
         -t {threads} \
-        -m relative_abundance  \
+        -m relative_abundance mean trimmed_mean covered_fraction covered_bases variance\
         -o {output.abundances}
         """

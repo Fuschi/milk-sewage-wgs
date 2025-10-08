@@ -28,6 +28,7 @@ include: "rules/stats_reads.smk"
 include: "rules/assembly.smk"
 include: "rules/binning_assembly.smk"
 include: "rules/binning_coassembly.smk"
+include: "rules/drep_coverage_label.smk"
 # ─────────────────────────────────────────────────────────────
 # FINAL TARGETS
 # ─────────────────────────────────────────────────────────────
@@ -53,6 +54,8 @@ rule all:
         expand("snakestream/dereplicated_genome/assembly/{sample_type}/figures/Winning_genomes.pdf",sample_type=list(BIOME_TO_SAMPLE.keys())),
         expand("snakestream/tables/coassembly/{sample_type}/checkm2_reports_for_dRep.csv", sample_type=list(BIOME_TO_SAMPLE.keys())),
         expand("snakestream/dereplicated_genome/coassembly/{sample_type}/figures/Winning_genomes.pdf",sample_type=list(BIOME_TO_SAMPLE.keys())),
+        "snakestream/tables/all/checkm2_reports_for_dRep.csv"
+        "snakestream/dereplicated_genome/all/figures/Winning_genomes.pdf"
     resources:
         mem_mb=1000,
         qos="normal",

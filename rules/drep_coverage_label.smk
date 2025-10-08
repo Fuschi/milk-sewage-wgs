@@ -10,7 +10,7 @@ def default_resources():
         trigger=1,
     )
 #----------------------------------------------------------------------------------------##----------------------------------------------------------------------------------------#
-rule merge_checkm2_reports_assembly:
+rule merge_checkm2_reports_all:
     input:
         log = [glob.glob("snakestream/checkm2/assembly/*/*/checkm2.log")+glob.glob("snakestream/checkm2/coassembly/*/checkm2.log")]
     output:
@@ -29,7 +29,7 @@ rule merge_checkm2_reports_assembly:
 
 
 #----------------------------------------------------------------------------------------#
-rule dereplicate_genomes_assembly:
+rule dereplicate_genomes_all:
     input:
           bins=[glob.glob("snakestream/binning_metabat/*/*/*_bin.BinInfo.txt")+glob.glob("snakestream/binning_metabat/*/*/*/*_bin.BinInfo.txt")],
           checkm2_table="snakestream/tables/all/checkm2_reports_for_dRep.csv"

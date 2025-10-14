@@ -105,7 +105,6 @@ rule coverm_relative_abundances:
         genomes_dir="snakestream/relative_abundances/dereplicated_genomes",
         r1_clean = "snakestream/reads_clean/{sample}_R1_clean.fastq.gz",
         r2_clean = "snakestream/reads_clean/{sample}_R2_clean.fastq.gz",
-        sing_clean="snakestream/reads_clean/{sample}_sing_clean.fastq.gz"
     output:
         abundances="snakestream/relative_abundances/{sample}_output_coverm.tsv"
     conda:
@@ -125,7 +124,6 @@ rule coverm_relative_abundances:
         coverm genome \
         --coupled {input.r1_clean} {input.r2_clean} \
         --genome-fasta-directory {input.genomes_dir} \
-        --single {input.sing_clean} \
         -t {threads} \
         -m relative_abundance mean trimmed_mean covered_fraction covered_bases variance\
         -o {output.abundances}

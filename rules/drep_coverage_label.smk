@@ -122,9 +122,11 @@ rule coverm_relative_abundances:
     shell:
         """
         coverm genome \
-        --coupled {input.r1_clean} {input.r2_clean} \
+        -1 {input.r1_clean} \
+        -2 {input.r2_clean} \
         --genome-fasta-directory {input.genomes_dir} \
         -t {threads} \
-        -m relative_abundance mean trimmed_mean covered_fraction covered_bases variance\
+        --min-covered-fraction 0
+        -m relative_abundance mean trimmed_mean covered_fraction covered_bases variance lenght count reads_per_base rpkm tpm\
         -o {output.abundances}
         """

@@ -130,3 +130,112 @@ rule coverm_relative_abundances:
         -m relative_abundance mean trimmed_mean covered_fraction covered_bases variance length count reads_per_base rpkm tpm\
         -o {output.abundances}
         """
+#----------------------------------------------------------------------------------------#
+rule gtdbtk_labeling:
+    input:
+        genomes_dir="snakestream/relative_abundances/dereplicated_genomes",
+    output:
+        log="snakestream/gtdbtk/gtdbtk.warnings.log"
+    conda:
+        "gtdbtk"
+    params:
+        out_dir="snakestream/gtdbtk",
+        data_dir="PATH TO DATABASE",
+    benchmark:
+       "benchmarks/gtdbtk/benchmark.txt"
+    log:
+        "logs/gtdbtk/log.log"
+    threads: 64
+    resources:
+        qos="normal",
+        mem_mb=32000,
+        time=1430,
+        **default_resources()
+    shell:
+       """
+        gtdntk classify_wf \
+        --genome_dir {input.genomes_dir} \
+        --out_dir {params.out_dir} \
+        --data_dir {params.data_dir} \
+        --cpus {threads}
+       """
+#----------------------------------------------------------------------------------------#
+rule combine_coverm_metrics:
+    input:
+        expand("snakestream/relative_abundances/{sample}_output_coverm.tsv", sample=SAMPLES)
+    output:
+        "snakestream/coverm_combined/relative_abundance.tsv",
+        "snakestream/coverm_combined/mean.tsv",
+        "snakestream/coverm_combined/trimmed_mean.tsv",
+        "snakestream/coverm_combined/covered_fraction.tsv",
+        "snakestream/coverm_combined/covered_bases.tsv",
+        "snakestream/coverm_combined/variance.tsv",
+        "snakestream/coverm_combined/length.tsv",
+        "snakestream/coverm_combined/read_count.tsv",
+        "snakestream/coverm_combined/reads_per_base.tsv",
+        "snakestream/coverm_combined/rpkm.tsv",
+        "snakestream/coverm_combined/tpm.tsv"
+    benchmark:
+       "benchmarks/coverm_combination/benchmark.txt"
+    log:
+        "logs/coverm_combination/log.log"
+    threads: 64
+    resources:
+        qos="normal",
+        mem_mb=32000,
+        time=1430,
+        **default_resources()
+    run:
+        import pandas as pd, re, os
+        
+        metrics = {
+            "Relative Abundance (%)": "relative_abundance.tsv",
+            "Mean": "mean.tsv",
+            "Trimmed Mean": "trimmed_mean.tsv",
+            "Covered Fraction": "covered_fraction.tsv",
+            "Covered Bases": "covered_bases.tsv",
+            "Variance": "variance.tsv",
+            "Length": "length.tsv",
+            "Read Count": "read_count.tsv",
+            "Reads per base": "reads_per_base.tsv",
+            "RPKM": "rpkm.tsv",
+            "TPM": "tpm.tsv",
+        }
+
+        dfs = {m: [] for m in metrics}
+
+        for f in input:
+            sample = re.search(r'(\d+)_R1_clean', f)
+            sample = sample.group(1) if sample else os.path.basename(f).replace('.tsv', '')
+
+            # 🔹 CoverM usa spazi multipli, li convertiamo in tab
+            with open(f) as fin:
+                lines = [re.sub(r'\s{2,}', '\t', line.strip()) for line in fin]
+            clean_text = "\n".join(lines)
+
+            # Leggi come TSV pulito
+            from io import StringIO
+            df = pd.read_csv(StringIO(clean_text), sep="\t")
+            df.columns = [c.strip() for c in df.columns]
+
+            for metric, outname in metrics.items():
+                col = [c for c in df.columns if metric in c]
+                if not col:
+                    continue
+                temp = df[['Genome', col[0]]].copy()
+                temp.columns = ['Genome', sample]
+                temp[sample] = pd.to_numeric(temp[sample], errors='coerce')
+                dfs[metric].append(temp)
+
+        os.makedirs("snakestream/coverm_combined", exist_ok=True)
+
+        for metric, outname in metrics.items():
+            if not dfs[metric]:
+                continue
+            merged = dfs[metric][0]
+            for d in dfs[metric][1:]:
+                merged = merged.merge(d, on='Genome', how='outer')
+            merged.to_csv(f"snakestream/coverm_combined/{outname}", sep='\t', index=False)
+            pd.read_csv(f"snakestream/coverm_combined/{outname}",sep=r'\s{2,}|\t', engine='python').to_csv(f"snakestream/coverm_combined/{outname}",sep="\t",index=False)
+        sys.stdout = open(log[0], "w")
+        sys.stderr = sys.stdout

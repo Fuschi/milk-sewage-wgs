@@ -1,0 +1,6 @@
+name: gtdbtk
+channels:
+  - conda-forge
+dependencies:
+  - gtdbtk=2.5.2
+prefix: /home/PERSONALE/niccolo.barbieri3/miniforge3/envs/gtdbtk

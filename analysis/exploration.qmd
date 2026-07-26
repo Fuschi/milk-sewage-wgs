@@ -1,0 +1,159 @@
+---
+title: "test"
+author: "Alessandro Fuschi"
+format: html
+editor: source
+---
+
+## Setup
+
+```{r, message=FALSE}
+library(tidyverse)
+library(mgnet)
+```
+
+```{r}
+exp <- local({
+
+  # ---------------------------------------------------------------------------
+  # Reference-based abundances
+  # ---------------------------------------------------------------------------
+
+  read_ref <- read_tsv(
+    "../data/raw/kaiju_sewage-milk_mags/SPECIE_count.tab.gz",
+    show_col_types = FALSE) %>%
+    column_to_rownames("Taxa") %>% t()
+  rownames(read_ref) <- substring(rownames(read_ref), 8, 11)
+
+
+  # ---------------------------------------------------------------------------
+  # Assembly-based abundances
+  # ---------------------------------------------------------------------------
+
+  read_ass <- read_tsv(
+    "../data/organized/abundances_coverm.tsv.gz",
+    show_col_types = FALSE) %>%
+    select(sample_id, taxa_id, read_count) %>%
+    filter(taxa_id != "unmapped") %>%
+    pivot_wider(names_from = taxa_id,
+                values_from = read_count) %>%
+    column_to_rownames("sample_id") %>%
+    as.matrix()
+  
+    rpkm_ass <- read_tsv(
+      "../data/organized/abundances_coverm.tsv.gz",
+      show_col_types = FALSE) %>%
+      select(sample_id, taxa_id, rpkm) %>%
+      filter(taxa_id != "unmapped") %>%
+      pivot_wider(names_from = taxa_id,
+                  values_from = rpkm) %>%
+      column_to_rownames("sample_id") %>%
+      as.matrix()
+
+
+  # ---------------------------------------------------------------------------
+  # Sample metadata
+  # ---------------------------------------------------------------------------
+
+  meta_sample <- read_tsv(
+    "../data/organized/meta_samples.tsv.gz",
+    show_col_types = FALSE
+  ) %>%
+    column_to_rownames("sample_id")
+
+  meta_sample <- meta_sample[rownames(read_ass), , drop = FALSE]
+  read_ref <- read_ref[rownames(read_ass), , drop = FALSE]
+
+
+  # ---------------------------------------------------------------------------
+  # Assembly-based taxonomy
+  # ---------------------------------------------------------------------------
+
+  taxa_ass <- full_join(
+    read_tsv(
+      "../data/organized/gtbtk.tsv.gz",
+      show_col_types = FALSE
+    ),
+    read_tsv(
+      "../data/organized/checkm2.tsv.gz",
+      show_col_types = FALSE
+    ) %>%
+      select(-sample_id),
+    by = "taxa_id"
+  ) %>%
+    left_join(
+      read_tsv(
+        "../data/organized/map_gtdb_to_ncbi.tsv.gz",
+        show_col_types = FALSE
+      ),
+      by = "taxa_id"
+    ) %>%
+    column_to_rownames("taxa_id")
+
+  taxa_ass <- taxa_ass[colnames(read_ass), , drop = FALSE]
+
+
+  # ---------------------------------------------------------------------------
+  # Reference-based taxonomy
+  # ---------------------------------------------------------------------------
+
+  taxa_ref <- full_join(
+    read_tsv(
+      "../data/organized/taxa_kaiju.tsv.gz",
+      show_col_types = FALSE
+    ),
+    read_tsv(
+      "../data/organized/map_ncbi_to_gtdb.tsv.gz",
+      show_col_types = FALSE
+    ),
+    by = join_by(taxa_id == ncbi_taxonomy)
+  ) %>%
+    column_to_rownames("taxa_id")
+
+  taxa_ref <- taxa_ref[colnames(read_ref), , drop = FALSE]
+
+
+  # ---------------------------------------------------------------------------
+  # Remove unwanted Kaiju taxa
+  # ---------------------------------------------------------------------------
+
+  unwanted <- c(
+    "unclassified",
+    "Viruses",
+    "Orf virus",
+    "cannot be assigned to a (non-viral) species"
+  )
+
+  keep_taxa <- !colnames(read_ref) %in% unwanted
+
+  read_ref <- read_ref[, keep_taxa, drop = FALSE]
+  taxa_ref <- taxa_ref[colnames(read_ref), , drop = FALSE]
+
+
+  # ---------------------------------------------------------------------------
+  # Create the final mgnets object
+  # ---------------------------------------------------------------------------
+
+  mgnets(
+    
+    read_ass = mgnet(
+      abun = read_ass,
+      meta = meta_sample,
+      taxa = taxa_ass),
+    
+    rpkm_ass = mgnet(
+      abun = read_ass,
+      meta = meta_sample,
+      taxa = taxa_ass),
+    
+    read_ref = mgnet(
+      abun = read_ref,
+      meta = meta_sample,
+      taxa = taxa_ref)
+    )
+})
+```
+
+```{r}
+exp 
+```

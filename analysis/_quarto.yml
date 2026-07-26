@@ -1,0 +1,10 @@
+project:
+  type: default
+
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 2
+    code-fold: true
+    code-tools: true

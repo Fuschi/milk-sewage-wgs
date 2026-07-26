@@ -1,0 +1,76 @@
+from pathlib import Path
+import csv
+
+# -----------------------------------------------------------------------------
+# Project paths
+# -----------------------------------------------------------------------------
+PIPELINE_DIR = Path(workflow.basedir).resolve()
+PROJECT_DIR = PIPELINE_DIR.parent
+DATA_DIR = PROJECT_DIR / "data"
+DATA_RAW_DIR = DATA_DIR / "raw"
+ENVS_DIR = PIPELINE_DIR / "envs"
+
+
+def project_path(value):
+    """Resolve a path relative to the project root unless it is absolute."""
+    path = Path(value)
+    return path if path.is_absolute() else PROJECT_DIR / path
+
+
+# The metadata table can be replaced from the command line, for example:
+# --config samples=data/sample_metadata_dummy.tsv
+SAMPLES_FILE = project_path(
+    config.get("samples", "data/sample_metadata.tsv")
+).resolve()
+
+with SAMPLES_FILE.open(newline="") as handle:
+    sample_rows = list(csv.DictReader(handle, delimiter="\t"))
+
+required_columns = {"sample_id", "biome"}
+missing_columns = required_columns.difference(sample_rows[0].keys() if sample_rows else [])
+if missing_columns:
+    raise ValueError(
+        f"Missing columns in {SAMPLES_FILE}: {', '.join(sorted(missing_columns))}"
+    )
+
+SAMPLES = [row["sample_id"] for row in sample_rows]
+SAMPLE_TO_BIOME = {row["sample_id"]: row["biome"] for row in sample_rows}
+
+if len(SAMPLES) != len(set(SAMPLES)):
+    raise ValueError(f"Duplicate sample_id values found in {SAMPLES_FILE}")
+
+READ_STATS_DIR = DATA_RAW_DIR / "read_stats"
+
+
+# -----------------------------------------------------------------------------
+# Final targets
+# -----------------------------------------------------------------------------
+localrules: all
+
+rule all:
+    input:
+        expand(
+            "reads_clean/{sample}_R{pair}_clean.fastq.gz",
+            sample=SAMPLES,
+            pair=["1", "2"],
+        ),
+        expand(
+            "qc/raw/{sample}_R{pair}_fastqc.html",
+            sample=SAMPLES,
+            pair=["1", "2"],
+        ),
+        expand(
+            "qc/trim/{sample}_R{pair}_trim_fastqc.html",
+            sample=SAMPLES,
+            pair=["1", "2"],
+        ),
+        str(READ_STATS_DIR / "seqkit_raw_reads.tsv"),
+        str(READ_STATS_DIR / "seqkit_trimmed_reads.tsv"),
+        str(READ_STATS_DIR / "seqkit_cleaned_reads.tsv"),
+
+
+# -----------------------------------------------------------------------------
+# Rules
+# -----------------------------------------------------------------------------
+include: "rules/cleaning.smk"
+include: "rules/stats_reads.smk"

@@ -1,0 +1,337 @@
+---
+title: "organize_data"
+format: html
+editor: visual
+---
+
+```{r, message=FALSE}
+library(tidyverse)
+```
+
+## metadata samples
+
+```{r}
+metadata_sample <- read_tsv("raw/samples/sample_metadata.tsv.gz", show_col_types = F) %>%
+  arrange(biome, sample_id) %>%
+  mutate(sample_id = as.character(sample_id))
+
+seqkit <- read_tsv("raw/samples/seqkit_cleaned_reads.tsv.gz", show_col_types = F) %>%
+  mutate(
+    sample_id = str_match(basename(file), "^(.*?)_R[12]_")[,2],
+    read = if_else(str_detect(file, "_R1_"), "R1", "R2")
+  ) %>%
+  group_by(sample_id) %>%
+  summarise(
+    num_paired_seqs = min(num_seqs),
+    num_seqs = sum(num_seqs, na.rm = TRUE),
+    sum_len  = sum(sum_len,   na.rm = TRUE),
+    avg_len  = sum_len / num_seqs,
+    min_len  = min(min_len, na.rm = TRUE),
+    max_len  = max(max_len, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+metadata_sample <- metadata_sample %>%
+  left_join(seqkit, by = "sample_id")
+
+rm(seqkit)
+write_tsv(metadata_sample, "organized/meta_samples.tsv.gz")
+```
+
+## metadata taxa
+
+```{r}
+gtdbtk <- bind_rows(
+  read_tsv("raw/gtdbtk/gtdbtk.bac120.summary.tsv.gz", show_col_types = F),
+  read_tsv("raw/gtdbtk/gtdbtk.ar53.summary.tsv.gz", show_col_types = F)
+) %>%
+  separate_wider_delim(
+    classification, 
+    delim = ";",
+    names = c("domain","phylum","class","order","family","genus","species"), 
+    cols_remove = FALSE
+  ) %>%
+  mutate(across(domain:species, ~ str_replace(.x, "^[a-z]__", ""))) %>%
+  mutate(across(domain:species, ~ na_if(.x, "Unkown"))) %>%
+  mutate(across(domain:species, ~ if_else(.x == "", "Unkown", .x))) %>%
+  rename(taxa_id = user_genome)
+
+checkm2 <- list.files("raw/checkm2", pattern = "\\.tsv\\.gz$", full.names = T) %>%
+  set_names(str_remove(basename(.), "_quality_report\\.tsv\\.gz$")) %>%
+  map(\(x) read_tsv(x, show_col_types = F)) %>%
+  list_rbind(names_to = "sample_id") %>%
+  rename(taxa_id = Name) %>%
+  filter(taxa_id %in% gtdbtk$taxa_id) %>%# take only the dereplicated ones
+  mutate(Completeness = if_else(Completeness_Model_Used == "Gradient Boost (General Model)",
+                                Completeness_General, Completeness_Specific),
+         .after = taxa_id)
+  
+write_tsv(gtdbtk, "organized/gtbtk.tsv.gz")
+write_tsv(checkm2, "organized/checkm2.tsv.gz")
+```
+
+## abundances
+
+```{r}
+desired <- c(
+  "sample_id", "taxa_id","read_count","reads_per_base","relative_abundance",
+  "rpkm","tpm","mean","trimmed_mean","variance",
+  "covered_fraction","covered_bases","length"
+)
+
+coverm <- list.files("raw/coverm", pattern = "\\.tsv\\.gz$", full.names = T) %>%
+  set_names(str_remove(basename(.), "\\.tsv\\.gz$")) %>%
+  map(\(x) read_tsv(x, show_col_types = F)) %>%
+  list_rbind(names_to = "sample_id") %>%
+  select(-Sample) 
+colnames(coverm) <- desired
+rm(desired)
+
+write_tsv(coverm, "organized/abundances_coverm.tsv.gz")
+```
+
+## Convert GTDB -\> NCBI
+
+```{r}
+# Extract the most specific known GTDB taxon from a GTDB-Tk table.
+#
+# Assumptions:
+# - Input table contains a column named 'classification'
+#
+# Arguments:
+# - gtdbtk     : GTDB-Tk table (data.frame / tibble)
+# - extra_cols: character vector of additional column names to keep
+#
+# Output:
+# - tibble with columns:
+#   taxon, rank, <extra_cols>
+extract_best_gtdb_taxon <- function(gtdbtk, extra_cols = NULL) {
+
+  # Required column
+  if (!"classification" %in% colnames(gtdbtk)) {
+    cli::cli_abort("Missing required column: 'classification'")
+  }
+
+  # Check extra columns
+  if (!is.null(extra_cols)) {
+    missing_extra <- setdiff(extra_cols, colnames(gtdbtk))
+    if (length(missing_extra) > 0) {
+      cli::cli_abort("Requested extra column(s) not found: {missing_extra}")
+    }
+  }
+
+  # Helper: extract best taxon from one classification string
+  extract_one <- function(cl) {
+
+    if (is.na(cl) || cl == "") {
+      return(tibble(taxon = NA_character_, rank = NA_character_))
+    }
+
+    # Split GTDB taxonomy string
+    parts <- str_split(cl, ";", simplify = TRUE)
+    parts <- parts[parts != ""]
+
+    # Remove empty ranks (e.g. 's__', 'g__')
+    parts_ok <- parts[!str_detect(parts, "^[dpcofgs]__$")]
+
+    if (length(parts_ok) == 0) {
+      return(tibble(taxon = NA_character_, rank = NA_character_))
+    }
+
+    # Most specific known taxon
+    taxon <- parts_ok[length(parts_ok)]
+
+    # Extract and decode rank
+    prefix <- str_match(taxon, "^([dpcofgs])__")[, 2]
+    rank <- dplyr::recode(
+      prefix,
+      d = "domain",
+      p = "phylum",
+      c = "class",
+      o = "order",
+      f = "family",
+      g = "genus",
+      s = "species",
+      .default = NA_character_
+    )
+
+    tibble(taxon = taxon, rank = rank)
+  }
+
+  # Core extraction
+  out <- purrr::map_dfr(gtdbtk$classification, extract_one)
+
+  # Append extra columns if requested
+  if (!is.null(extra_cols)) {
+    out <- bind_cols(out, gtdbtk[, extra_cols, drop = FALSE])
+  }
+
+  out %>%
+    select(taxon, rank, everything())
+}
+```
+
+```{r}
+best_gtdbtk <- extract_best_gtdb_taxon(gtdbtk, extra_cols = "taxa_id")
+writeLines(best_gtdbtk$taxon, "gtdb_to_ncbi/names_gtdb.txt")
+```
+
+```{bash}
+mkdir -p raw/gtdb-metadata
+
+aria2c -x 8 -s 8 -d  raw/gtdb-metadata \
+  https://data.gtdb.ecogenomic.org/releases/release226/226.0/bac120_metadata_r226.tsv.gz
+
+aria2c -x 8 -s 8 -d raw/gtdb-metadata \
+  https://data.gtdb.ecogenomic.org/releases/release226/226.0/ar53_metadata_r226.tsv.gz
+```
+
+```{bash}
+mkdir -p gtdb_to_ncbi
+
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate gtdb_to_taxdump
+
+ncbi-gtdb_map.py -q gtdb_taxonomy gtdb_to_ncbi/names_gtdb.txt \
+  raw/gtdb-metadata/ar53_metadata_r226.tsv.gz raw/gtdb-metadata/bac120_metadata_r226.tsv.gz \
+  -p 12 -v -o gtdb_to_ncbi
+```
+
+```{r, message=FALSE}
+gtdb_ncbi_map <- read_tsv("gtdb_to_ncbi/taxonomy_map_summary.tsv.gz")
+gtdb_ncbi_map <- gtdb_ncbi_map %>%
+  right_join(best_gtdbtk, join_by(gtdb_taxonomy == taxon)) %>%
+  rename(ncbi_rank = target_tax_level, ncbi_lineage = lineage, gtdb_rank = rank) %>%
+  relocate(taxa_id, gtdb_taxonomy, ncbi_taxonomy, gtdb_rank, ncbi_rank,
+           lca_frac, ncbi_lineage) %>%
+  mutate(method = "assembly-based", 
+         .before = 1)
+```
+
+```{r}
+write_tsv(gtdb_ncbi_map, "organized/map_gtdbtk_ncbi.tsv.gz")
+```
+
+## Kaiju
+
+```{r, message=FALSE}
+count_kaiju <- read_tsv("raw/kaiju_sewage-milk_mags/SPECIE_count.tab.gz")  %>%
+  filter(rowSums(across(-Taxa, ~ .x > 0)) >= 10) %>%
+  column_to_rownames("Taxa") %>%
+  t %>%
+  as_tibble(rownames = "sample_id") %>%
+  mutate(sample_id = str_remove_all(sample_id, 'specie.|.out.txt')) %>%
+  column_to_rownames("sample_id")
+
+```
+
+```{r}
+best_kaiju <- colnames(count_kaiju)
+writeLines(best_kaiju, "ncbi_to_gtdb/names_ncbi.txt")
+```
+
+```{bash}
+mkdir -p ncbi_to_gtdb
+
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate gtdb_to_taxdump
+
+ncbi-gtdb_map.py ncbi_to_gtdb/names_ncbi.txt \
+  raw/gtdb-metadata/ar53_metadata_r226.tsv.gz raw/gtdb-metadata/bac120_metadata_r226.tsv.gz \
+  -N -p 12 -v -o ncbi_to_gtdb
+```
+
+```{r}
+kaiju_gtdb_map <- read_tsv("ncbi_to_gtdb/taxonomy_map_summary.tsv.gz",
+                           show_col_types = F)
+kaiju_gtdb_map <- kaiju_gtdb_map %>%
+  rename(gtdb_rank = target_tax_level, gtdb_lineage = lineage) %>%
+  mutate(method = "kaiju", 
+         .before = 1)
+```
+
+### Kaiju full taxonomy of species
+
+```{r}
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(taxizedb)
+library(furrr)
+
+# Example:
+# kaiju_names <- c("Bacteroides fragilis", "Escherichia coli", "cicciopasticcio")
+
+# Retrieve NCBI taxids from taxizedb
+ncbiID <- taxizedb::name2taxid(best_kaiju)
+
+# Helper function to extract the taxonomy ranks for a single taxid
+get_ncbi_ranks <- function(taxid) {
+  # Taxonomic ranks we want to extract
+  ranks <- c("species", "genus", "family", "order", "class", "phylum")
+  
+  # If taxid is NA (name not found), return a list of NAs
+  if (is.na(taxid)) {
+    return(as.list(setNames(rep(NA_character_, length(ranks)), ranks)))
+  }
+  
+  # Retrieve full classification for that taxid
+  cl <- taxizedb::classification(taxid)[[1]]
+  
+  # Extract the taxon names corresponding to the ranks of interest
+  out <- cl$name[match(ranks, cl$rank)]
+  
+  # Assign names and return as a list
+  out <- setNames(as.list(out), ranks)
+  
+  out
+}
+
+# Set up parallel plan (change workers according to your machine)
+plan(multisession, workers = 12)
+
+# Build the initial tibble
+taxa_kaiju <- tibble(
+  input_name = best_kaiju,
+  taxid      = ncbiID
+) %>% 
+  # 2. Apply helper function in parallel using future_map
+  mutate(classif = future_map(taxid, get_ncbi_ranks)) %>% 
+  # 3. Expand the classification list into separate columns
+  unnest_wider(classif)
+```
+
+```{r}
+taxa_kaiju <- taxa_kaiju %>%
+  rename(taxa_id = input_name, species_ncbi_id = taxid, species_taxize = species) 
+```
+
+```{r}
+write_tsv(taxa_kaiju, "organized/taxa_kaiju.tsv.gz")
+```
+
+## Genus
+
+```{r}
+read_genus_ass <- coverm %>%
+  select(sample_id, taxa_id, read_count) %>%
+  left_join(select(gtdbtk, taxa_id, genus), by = "taxa_id") %>%
+  filter(taxa_id != "unmapped") %>%
+  summarise(read_count = sum(read_count), .by = c("sample_id", "genus")) %>%
+  filter(genus != "Unkown") %>%
+  pivot_wider(names_from = "genus", values_from = "read_count") %>%
+  column_to_rownames("sample_id")
+```
+
+```{r}
+taxa_gtdb_genus <- gtdbtk %>%
+  select(taxa_id, classification) %>%
+  mutate(classification = str_remove(classification, ";s__.*$")) %>%
+  select(-taxa_id) %>%
+  distinct() %>%
+  bind_cols(extract_best_gtdb_taxon(.)) %>%
+  filter(rank == "genus") %>%
+  mutate(taxon = str_remove_all(taxon, "g__")) %>%
+  column_to_rownames("taxon")
+taxa_gtdb_genus <- taxa_gtdb_genus[colnames(read_genus_ass), ]
+```

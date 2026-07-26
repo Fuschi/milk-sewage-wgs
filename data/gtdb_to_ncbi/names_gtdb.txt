@@ -1,0 +1,596 @@
+g__JAQICB01
+s__Oligella sp012518515
+g__JAEKNW01
+g__JAEZRQ01
+g__Flavobacterium
+g__Desulfobulbus
+s__Desulfovibrio desulfuricans
+g__UBA1313
+s__Denitrificimonas sp012719655
+s__Paenalcaligenes sp012839585
+g__Desulfomicrobium
+g__UBA1038
+g__Venatoribacter
+g__QZKY01
+g__Pygmaiobacter
+s__Sphaerochaeta sp001604325
+s__UBA7185 sp017387265
+g__Cryptobacteroides
+g__QALR01
+s__Alistipes sp017391665
+g__Faecousia
+g__Niveibacterium
+g__Pararheinheimera
+g__JAGOXX01
+s__Macromonas_A bipunctata
+s__Bact-08 sp000473305
+s__Macellibacteroides sp018054455
+f__UBA1242
+g__JAGOXX01
+g__JAEZRQ01
+g__UBA5348
+g__UBA8389
+s__Sulfurimonas sp002452425
+g__JAXESU01
+s__RGIG10190 sp023227695
+g__UBA8515
+g__JAAZFZ01
+g__Sulfurospirillum
+s__Sulfurospirillum sp028705785
+g__JAAZLA01
+g__UBA5070
+g__Proteiniphilum
+f__Rs-D84
+g__CAIXLI01
+g__CALMWE01
+g__UBA1359
+s__UBA1313 sp001873075
+g__CAIXLI01
+g__Colicola
+g__UBA1740
+s__JAXJQF01 sp036311285
+g__JAAYAE01
+s__Veillonella sp009929605
+g__Desulfovibrio
+s__Bacteroides sp963675905
+s__Acinetobacter sp947626835
+g__UBA4951
+g__Prevotella
+s__Selenomonas_A sp018052705
+g__Roseburia_C
+s__Bacteroides graminisolvens
+g__Aliarcobacter
+g__RUG12834
+s__UBA1794 sp018054715
+s__Lactococcus_A sp041800635
+g__Prevotella
+g__Solidesulfovibrio
+s__Bacteroides sp963667395
+f__UBA1242
+g__Prevotella
+s__RGIG4576 sp904501735
+g__CAG-448
+s__Acinetobacter sp012371325
+s__WG-1 sp900539665
+s__Paracholeplasma brassicae
+s__Treponema_D sp900767955
+s__RGIG9060 sp036307825
+s__Acinetobacter pseudolwoffii
+g__Neisseria
+s__Aliarcobacter sp017996075
+s__JAHHUH01 sp937901335
+s__Physcousia sp017379075
+s__Psychrobacter pasteurii
+s__Halopseudomonas formosensis
+s__Treponema_D sp017381365
+s__Succinivibrio faecicola
+s__JBAXTE01 sp963556065
+g__Bact-08
+s__Flavobacterium odoratimimum
+g__Marinospirillum
+g__W0P28-013
+s__Paenalcaligenes intestinipullorum
+g__RGIG4097
+s__Sulfurospirillum sp001548035
+s__UBA10566 sp028709955
+s__Macellibacteroides fermentans
+s__JBAZGG01 sp041653015
+g__WRCA01
+s__Equibacterium sp012513425
+g__Wohlfahrtiimonas
+g__CALGYY01
+s__JAAZAI01 sp012514445
+s__PHBP01 sp023421135
+f__CAG-465
+g__DAOPZC01
+g__CALMWE01
+g__Colenecus
+g__JALHET01
+s__Sphaerochaeta globosa
+g__UBA12489
+g__PHBP01
+g__UBA12489
+g__Lenti-01
+g__SZUA-370
+g__UBA10939
+g__UBA5429
+s__Syner-03 sp002839185
+s__Sulfurospirillum sp021206415
+s__Oligosphaera ethanolica
+s__Cloacimonas sp017996595
+s__DMER64 sp002408205
+g__LD21
+f__Tenuifilaceae
+g__UBA10939
+g__UBA1412
+g__JARULA01
+s__Fibro-01 sp012841225
+s__Psychrobacter fulvigenes
+g__Aliarcobacter
+s__Acinetobacter faecalis
+s__Proteiniphilum sp012513315
+g__Oligella
+g__Denitrificimonas
+g__JAAYTL01
+s__W0P28-013 sp035270405
+s__Geofilum sp012838865
+g__Sphaerochaeta
+g__UBA10566
+s__Sphaerochaeta sp012838275
+g__Frigididesulfovibrio
+s__Haploplasma sp035270345
+s__Oligella sp012511555
+g__Haploplasma
+s__UBA8389 sp028709215
+s__Succinivibrio sp003456415
+s__Paludibacter sp034004015
+g__Sedimentibacter
+s__Fibro-01 sp001462345
+s__Halopseudomonas sp012735335
+s__Teretinema zuelzerae
+s__UBA8389 sp012718945
+g__Bact-08
+s__Psychrobacter faecalis
+g__Oscillibacter
+s__UBA10566 sp012837565
+s__Rheinheimera lutimaris
+g__Colenecus
+g__SKHV01
+g__Cellvibrio
+s__JAQUTK01 sp028691445
+g__UBA5456
+g__Teretinema
+g__SKHV01
+s__UBA5409 sp002410615
+g__Denitrificimonas
+s__JAQVUB01 sp028699735
+s__CALLXS01 sp028691175
+g__CAJCBL01
+s__Aquabacterium sp017989885
+s__Oligosphaera ethanolica
+g__UBA1067
+s__JAAYYM01 sp035271065
+g__Colenecus
+s__Saccharofermentans sp012728275
+s__JAAZLA01 sp022704725
+s__Oxalobacter vibrioformis
+s__Phocaeicola paurosaccharolyticus
+g__Thauera
+g__JAGOXX01
+s__DATESG01 sp035270805
+g__UBA1361
+g__Tissierella_B
+g__Paralysiella
+g__Proteiniphilum
+g__DUUI01
+s__JAAYFB01 sp012728465
+s__Streptococcus suis_AA
+s__Paracholeplasma morum
+s__Neisseria suis
+s__Geopseudomonas guangdongensis
+s__UBA1067 sp902788415
+s__Oscillibacter sp017380995
+g__Faecousia
+s__Aliarcobacter skirrowii
+s__Alistipes sp900768015
+g__UBA8515
+g__Fibro-01
+g__Teretinema
+f__Palsa-1180
+g__SKHV01
+g__STD2-77
+g__SB25
+s__Sphaerochaeta associata
+s__UBA1424 sp002329705
+g__Teretinema
+f__XYD1-FULL-46-19
+s__JAAYDH01 sp028690575
+g__STD2-77
+g__DAOTKC01
+s__Marinospirillum sp947624795
+g__Haploplasma
+g__Haploplasma
+s__Vibrio cincinnatiensis_A
+s__Physcousia sp017622815
+g__Marinospirillum
+s__Proteiniphilum sp012799155
+s__Acholeplasma laidlawii_A
+s__Prevotella sp017424205
+s__Pilosibacter sp017380975
+g__Frigididesulfovibrio
+g__Prevotella
+s__Physcousia sp900770805
+s__Aphodousia sp017383055
+g__Alistipes
+g__Marinospirillum
+s__Anaerovibrio slackiae
+g__Scatosoma
+g__Faecalibacterium
+g__UMGS172
+s__Alistipes sp900770585
+s__Denitrificimonas sp012800475
+s__Venatoribacter sp937974825
+g__Pseudomaricurvus
+g__Amaricoccus
+s__Acinetobacter johnsonii
+s__Lactococcus petauri
+s__Micropruina sp035378545
+s__Mobilicoccus sp032056465
+s__Lactococcus cremoris
+s__Lactococcus_A raffinolactis
+g__UBA8389
+g__UBA1740
+s__Simplicispira sp028686475
+s__Humidesulfovibrio sp002422505
+g__UBA11512
+g__UBA1740
+g__SR-FBR-E99
+g__Desulfobulbus
+g__SKHV01
+g__CAG-303
+s__UBA2632 sp035271465
+s__JBAYFD01 sp041667365
+g__Teretinema
+s__Lentimicrobium sp041670625
+s__Proteiniclasticum ruminis
+f__Anaerovoracaceae
+g__UBA4951
+g__DUPY01
+s__CAG-873 sp902491515
+s__Onthomorpha sp002358855
+f__Peptococcaceae
+s__RGIG423 sp017387285
+s__Acinetobacter sp002135245
+s__Erysipelothrix sp012520695
+s__Trichococcus flocculiformis
+s__Petrimonas sulfuriphila
+s__UBA2259 sp012514355
+s__Merdimorpha sp017537565
+g__Faecicola
+s__JAAYIB01 sp012744295
+s__RGIG3925 sp017558715
+g__Teretinema
+g__UBA12465
+g__UMGS1668
+s__Moheibacter sp012522185
+s__UBA1715 sp036752345
+g__Gallintestinimicrobium
+g__Firm-09
+s__Marinospirillum sp007119985
+s__JAFGMC01 sp016927395
+g__RGIG665
+s__Anaerobium acetethylicum
+g__WQTX01
+g__RGIG7179
+g__Phocaeicola
+g__Cellvibrio
+g__Lawsonibacter
+f__CAIRNS01
+g__Verruco-01
+s__Bact-08 sp018053445
+g__Oscillibacter
+s__Prevotella copri
+s__Campylobacter sp017646085
+s__UBA737 sp017513195
+g__Scatosoma
+g__UBA7584
+g__UBA6857
+s__Perlabentimonas sp937915475
+g__Paenalcaligenes
+g__SKHV01
+g__Cellvibrio
+g__Ruminococcoides
+s__Mesolinea sp038562515
+g__Treponema_D
+s__Avelusimicrobium sp015062115
+g__JAQVUB01
+g__Colicola
+s__Corynebacterium suedekumii
+f__Acholeplasmataceae
+s__Oceanimonas sp012518835
+s__Succinivibrio sp900316375
+o__Fusobacteriales
+s__Alistipes sp904502285
+s__UBA7185 sp017383785
+g__UBA4644
+s__Venatoribacter cucullus
+g__UBA8389
+s__Moraxella_A sp937975585
+g__HGM12713
+g__Acetatifactor
+s__Paludibacter sp028691965
+g__G963678095
+g__UPXZ01
+g__JAUNUI01
+g__UBA12465
+g__MWDT01
+g__CAG-272
+g__Microbacter
+g__CAG-303
+g__JAAZLA01
+s__Duodenibacillus sp017628205
+g__DTU089
+g__JAQUSX01
+g__Faecousia
+s__Onthomorpha sp002358835
+s__Syner-03 sp012727545
+g__Arachnia
+s__JAGPIS01 sp018054835
+g__JAISKV01
+g__Onthovivens
+g__Teretinema
+g__Algoriphagus
+s__Prevotella sp900548195
+s__RGIG446 sp017386805
+g__JAHHSE01
+g__Sphaerochaeta
+g__GCA-002282575
+f__UBA12059
+s__Teretinema sp012838745
+g__JAGBWK01
+g__UBA8389
+g__DAOPYE01
+s__Trueperella sp012727825
+g__Alistipes
+g__Faecousia
+s__Bacteroides sp017992695
+g__HGM11412
+g__Sulfurospirillum
+f__Cellulomonadaceae
+g__Verruco-01
+g__Aquaspirillum
+s__Minthosoma sp904501945
+g__Frisingicoccus
+g__RGIG1896
+g__UBA940
+g__DUOL01
+g__JBAXTE01
+s__JAAYFO01 sp012728215
+g__DASRQK01
+g__PHBQ01
+s__UBA1765 sp017631885
+g__Butyrivibrio_A
+g__UBA8389
+g__CAINDR01
+s__Paracholeplasma sp034006765
+g__Desulfomicrobium
+g__JBCFBK01
+g__CAG-1782
+g__Firm-13
+g__Peloplasma
+g__Draconibacterium
+g__JBBQIY01
+g__Thiopseudomonas
+g__SKHV01
+g__Enterousia
+g__WARW01
+g__UBA1067
+f__Selenomonadaceae
+g__Cellvibrio
+g__Campylobacter_B
+g__JAVXAG01
+g__Paracholeplasma
+s__Oligella ureolytica
+f__Fibrobacteraceae
+s__Alistipes sp017558115
+g__RGIG6307
+g__UBA4181
+g__DTU089
+g__Sphingobacterium
+g__Aquincolibacterium
+g__UBA1413
+g__SKHV01
+s__Faecousia sp017473455
+g__UBA1444
+g__Faecousia
+s__JAKLDO01 sp035354435
+g__UBA4951
+g__MWBB01
+s__JALNYF01 sp023229985
+g__Erysipelothrix
+s__Lentimicrobium sp034005265
+g__Thiopseudomonas
+s__RGIG4576 sp017391675
+g__Scatosoma
+s__Geofilum sp002427105
+s__UBA4363 sp017646805
+g__Proteiniphilum
+f__UBA1242
+g__Aequorivita
+g__Scatosoma
+g__JBGSOB01
+g__SIG622
+g__HGM12587
+g__UBA12489
+g__JAQVCM01
+f__Absconditicoccaceae
+g__SIG640
+g__JAHHTP01
+g__CAIXLI01
+s__UMGS1052 sp017549365
+g__CAMEYY01
+g__JAFBIO01
+s__Moheibacter sp035515075
+s__MWEH01 sp002070965
+g__UBA1740
+s__UBA2810 sp900317945
+s__Erysipelothrix sp041811795
+g__JAGLTN01
+g__JAFGUR01
+g__UBA4951
+f__CAG-826
+s__Ornithomonoglobus sp017380475
+g__UMGS1865
+s__Coliplasma sp017629175
+g__Thauera
+s__Teretinema sp002070025
+g__JAAYLN01
+s__Anaeromusa sp009929485
+s__Enterocola sp022708465
+g__Alistipes
+g__Paludibacter
+g__Taishania
+f__Fibrobacteraceae
+g__JAAZDN01
+g__Hominenteromicrobium
+s__Azonexus sp016790885
+g__UBA1361
+g__Teretinema
+g__Oscillibacter
+g__Aphodosoma
+g__Sphaerochaeta
+g__RGIG3102
+g__Faecousia
+g__Spyradocola
+g__RGIG9079
+s__Sphaerochaeta sp032144095
+g__JB111
+g__SFJ001
+g__Firm-13
+s__JAAZIZ01 sp012515455
+g__Kaistella
+g__Saezia
+s__Pseudidiomarina indica
+g__Barnesiella
+s__JAQVSP01 sp028700425
+g__Paludihabitans
+g__UMGS731
+f__Ruminococcaceae
+g__JAAZBG01
+s__Escherichia coli
+g__Firm-13
+g__Sphaerochaeta
+g__Solilutibacter
+s__Alistipes sp017391185
+g__UMGS1002
+g__UBA5868
+g__Sphaerochaeta
+s__Brumimicrobium sp035497735
+s__Alistipes sp017380955
+s__UBA10566 sp023415495
+g__Oligella
+f__UBA1829
+g__UBA1715
+g__Rifleibacterium
+s__UBA737 sp902762875
+g__Alistipes
+g__Alistipes
+g__JAAZLA01
+g__Bact-19
+g__Parabacteroides
+g__Paludibacter
+g__Pararheinheimera
+s__JACKCP01 sp034006035
+s__Methylophaga sp947631375
+g__RZYP01
+g__JAAYYM01
+g__GWF2-43-63
+g__Alistipes
+s__UBA2922 sp905236515
+s__Comamonas denitrificans
+s__JAAZLA01 sp012799545
+o__RFP12
+g__Marinobacter
+g__Propionivibrio
+g__SZUA-370
+g__CALXOD01
+g__UBA2658
+g__UBA5453
+s__Sphaerochaeta sp012519125
+g__Treponema_D
+g__JAAZBG01
+g__Aliidiomarina
+g__Hominenteromicrobium
+g__Pontiella
+g__JAQVOS01
+s__Proteocatella sp009929415
+g__Frigididesulfovibrio
+s__HGM20899 sp900767005
+s__Bacteroides_E propionicifaciens
+g__JAQVSH01
+g__LD21
+g__Cryptobacteroides
+g__CALYZD01
+s__Bacteroides sp945607605
+g__RUG11130
+g__Alteracholeplasma
+s__RGIG4079 sp017390185
+g__TWA4
+g__UBA6345
+s__Atopostipes sp036752205
+g__Scatosoma
+s__UBA3818 sp017408855
+s__Erysipelothrix sp002359085
+s__UBA737 sp036308405
+s__Flavobacterium sp018384465
+g__CAILVY01
+g__RGIG3102
+g__UBA1740
+g__DMER64
+g__Eisenbergiella
+g__UBA6084
+s__Prevotella sp002251295
+s__Desulfobulbus sp030824455
+g__UBA2212
+g__CAIZQW01
+g__UBA5070
+g__Epilithonimonas
+g__Erysipelothrix
+g__JAAZKI01
+g__Oxalobacter
+s__UBA10566 sp028708845
+s__Alistipes sp904502075
+s__JAUNQW01 sp030535975
+g__UBA7862
+s__Aeromonas salmonicida
+s__Amulumruptor sp900539915
+f__UBA1242
+s__Acinetobacter indicus
+g__UBA2632
+s__CTSOIL-112 sp017986195
+g__Erysipelothrix
+s__VadinCA11 sp035271165
+g__VadinCA11
+g__JBAZDV01
+g__Methanoregula
+g__CABMGO01
+g__UBA472
+g__JAKQTP01
+s__Methanocorpusculum sp029987395
+s__VadinCA11 sp002498365
+s__Methanocorpusculum parvum
+s__Methanogenium sp012523385
+s__Methanimicrococcus sp034006575
+s__Methanocorpusculum sp002506085
+g__Methanoregula
+g__Methanosphaerula
+s__RumEn-M2 sp001421175
+s__Methanocorpusculum sp017387505
+g__Methanimicrococcus
+s__JALNYB01 sp023230065
+g__Bathycorpusculum
+g__VadinCA11
+g__Methanimicrococcus
+s__VadinCA11 sp035271005
+s__Methanosarcina mazei
+s__Methanobrevibacter sp900314635

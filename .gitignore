@@ -1,13 +1,35 @@
-# Conda environments
+# Pipeline workspace: FASTQ, FASTA, BAM, references, logs and intermediates
+pipeline/workspace/*
+!pipeline/workspace/README.md
+
+# Snakemake runtime
+.snakemake/
+pipeline/workspace/.snakemake/
+
+# Conda and virtual environments
 .env/
 .venv/
 .mamba/
+.conda/
 
-# Snakemake internals
-.snakemake/
-logs/
-*.err
+# Scheduler and generic logs outside the workspace
 *.out
+*.err
+*.log
 
-# Dati
-snakestream/
+# Quarto output and cache
+.quarto/
+_site/
+*_cache/
+*_files/
+
+# R session files
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+
+# System files
+.DS_Store
+
+data/raw/gtdb-metadata/bac120_metadata_r226.tsv.gz

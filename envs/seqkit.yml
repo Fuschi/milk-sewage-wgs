@@ -1,7 +1,0 @@
-name: seqkit
-channels:
-  - bioconda
-  - conda-forge
-dependencies:
-  - seqkit=2.10.0
-prefix: /home/PERSONALE/niccolo.barbieri3/miniforge3/envs/seqkit

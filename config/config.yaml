@@ -1,0 +1,8 @@
+samples: config/samples.tsv
+references:
+  bostaurus_index: /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9
+  # Path inside the BBMap SIF, not on the host filesystem.
+  adapters: /opt/conda/opt/bbmap-36.32/resources/adapters.fa
+containers:
+  bbmap: /archive/extra/daniel.remondini2/bioinf_db/containers/bbmap/36.32/bbmap_36.32.sif
+  hostremoval: /archive/extra/daniel.remondini2/bioinf_db/containers/hostremoval/bowtie2-2.5.4_samtools-1.22/bowtie2-2.5.4_samtools-1.22.sif

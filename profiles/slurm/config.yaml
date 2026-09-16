@@ -1,0 +1,34 @@
+# Snakemake profile for the OPH/Matrix SLURM environment.
+# Adapt account/QoS and concurrency limits to the project allocation.
+
+executor: slurm
+jobs: 20
+cores: 160
+
+printshellcmds: true
+verbose: false
+latency-wait: 60
+max-jobs-per-second: 5
+keep-going: true
+show-failed-logs: true
+
+# Software tools are executed in Apptainer containers declared in config.yaml.
+software-deployment-method: ["apptainer"]
+apptainer-args: >-
+  --bind /home/PERSONALE:/home/PERSONALE
+  --bind /scratch:/scratch
+  --bind /archive:/archive
+  --cleanenv
+
+# Defaults can be overridden rule-by-rule.
+default-resources:
+  - slurm_account=applicata
+  - slurm_qos=normal
+  - cpus_per_task=1
+  - runtime=30
+  - mem_mb=2000
+  - slurm_requeue=false
+
+slurm-jobname-prefix: "smk-milk-sewage"
+slurm-logdir: "logs/slurm"
+slurm-keep-successful-logs: false

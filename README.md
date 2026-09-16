@@ -11,6 +11,7 @@ scripts/      Helper scripts.
 docs/         Setup instructions.
 profiles/     Cluster execution settings.
 data/         Workflow data (not tracked by Git).
+tables/       Summary tables.
 logs/         Execution logs.
 benchmarks/   Resource usage records.
 ```

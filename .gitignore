@@ -1,5 +1,6 @@
 # Workflow data
-/data
+/data/*
+!/data/.gitkeep
 /.snakemake/
 /.apptainer/
 /.snakemake-apptainer/

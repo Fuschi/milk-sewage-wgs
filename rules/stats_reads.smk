@@ -7,7 +7,7 @@ rule seqkit_raw_reads:
     threads: 16
     resources: mem_mb=20000, runtime=600
     container: config["containers"]["seqkit"]
-    shell: "seqkit stats -j {threads} -T {input:q} -o {output:q} > {log:q} 2>&1"
+    shell: "seqkit stats -j {threads} -T {input} -o {output} > {log} 2>&1"
 
 # Trimmed read statistics.
 rule seqkit_trimmed_reads:
@@ -18,7 +18,7 @@ rule seqkit_trimmed_reads:
     threads: 16
     resources: mem_mb=20000, runtime=600
     container: config["containers"]["seqkit"]
-    shell: "seqkit stats -j {threads} -T {input:q} -o {output:q} > {log:q} 2>&1"
+    shell: "seqkit stats -j {threads} -T {input} -o {output} > {log} 2>&1"
 
 # Cleaned read statistics.
 rule seqkit_cleaned_reads:
@@ -29,7 +29,7 @@ rule seqkit_cleaned_reads:
     threads: 16
     resources: mem_mb=20000, runtime=600
     container: config["containers"]["seqkit"]
-    shell: "seqkit stats -j {threads} -T {input:q} -o {output:q} > {log:q} 2>&1"
+    shell: "seqkit stats -j {threads} -T {input} -o {output} > {log} 2>&1"
 
 # Singleton read statistics.
 rule seqkit_cleaned_reads_sing:
@@ -40,4 +40,4 @@ rule seqkit_cleaned_reads_sing:
     threads: 16
     resources: mem_mb=20000, runtime=600
     container: config["containers"]["seqkit"]
-    shell: "seqkit stats -j {threads} -T {input:q} -o {output:q} > {log:q} 2>&1"
+    shell: "seqkit stats -j {threads} -T {input} -o {output} > {log} 2>&1"

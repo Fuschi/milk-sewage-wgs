@@ -7,3 +7,4 @@ containers:
   bbmap: /archive/extra/daniel.remondini2/bioinf_db/containers/bbmap/36.32/bbmap_36.32.sif
   hostremoval: /archive/extra/daniel.remondini2/bioinf_db/containers/hostremoval/bowtie2-2.5.4_samtools-1.22/bowtie2-2.5.4_samtools-1.22.sif
   seqkit: /archive/extra/daniel.remondini2/bioinf_db/containers/seqkit/2.10.0/seqkit_2.10.0.sif
+  megahit: /archive/extra/daniel.remondini2/bioinf_db/containers/megahit/1.2.9/megahit_1.2.9.sif

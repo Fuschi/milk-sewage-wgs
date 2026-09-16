@@ -20,11 +20,11 @@ rule bbduk_trim:
     shell:
         """
         bbduk.sh -Xmx14g threads={threads} \
-            in1={input.r1:q} in2={input.r2:q} \
-            out1={output.r1:q} out2={output.r2:q} \
-            outs={output.singleton:q} stats={output.stats:q} \
-            ref={params.adapters:q} ktrim=r k=23 mink=11 hdist=1 tpe tbo \
-            qtrim=rl trimq=10 ow=t ziplevel=6 > {log:q} 2>&1
+            in1={input.r1} in2={input.r2} \
+            out1={output.r1} out2={output.r2} \
+            outs={output.singleton} stats={output.stats} \
+            ref={params.adapters} ktrim=r k=23 mink=11 hdist=1 tpe tbo \
+            qtrim=rl trimq=10 ow=t ziplevel=6 > {log} 2>&1
         """
 
 # Filter host reads from paired-end data.
@@ -48,12 +48,12 @@ rule remove_host:
     shell:
         """
         (
-        bowtie2 -p {threads} -x {params.index:q} -1 {input.r1:q} -2 {input.r2:q} -S /dev/stdout \
-            | samtools view -bS - > {output.bam:q}
-        samtools view -b -f 12 -F 256 {output.bam:q} > {output.unmapped:q}
-        samtools sort -n -m 5G -@ {threads} {output.unmapped:q} -o {output.sorted:q}
-        samtools fastq -@ {threads} -1 {output.r1:q} -2 {output.r2:q} -0 /dev/null -s /dev/null -n {output.sorted:q}
-        ) > {log:q} 2>&1
+        bowtie2 -p {threads} -x {params.index} -1 {input.r1} -2 {input.r2} -S /dev/stdout \
+            | samtools view -bS - > {output.bam}
+        samtools view -b -f 12 -F 256 {output.bam} > {output.unmapped}
+        samtools sort -n -m 5G -@ {threads} {output.unmapped} -o {output.sorted}
+        samtools fastq -@ {threads} -1 {output.r1} -2 {output.r2} -0 /dev/null -s /dev/null -n {output.sorted}
+        ) > {log} 2>&1
         """
 
 # Filter host reads from single-end data.
@@ -75,10 +75,10 @@ rule remove_host_sing:
     shell:
         """
         (
-        bowtie2 -p {threads} -x {params.index:q} -U {input.singleton:q} -S /dev/stdout \
-            | samtools view -bS - > {output.bam:q}
-        samtools view -b -f 12 -F 256 {output.bam:q} > {output.unmapped:q}
-        samtools sort -n -m 5G -@ {threads} {output.unmapped:q} -o {output.sorted:q}
-        samtools fastq -@ {threads} -0 {output.singleton:q} -s /dev/null -n {output.sorted:q}
-        ) > {log:q} 2>&1
+        bowtie2 -p {threads} -x {params.index} -U {input.singleton} -S /dev/stdout \
+            | samtools view -bS - > {output.bam}
+        samtools view -b -f 12 -F 256 {output.bam} > {output.unmapped}
+        samtools sort -n -m 5G -@ {threads} {output.unmapped} -o {output.sorted}
+        samtools fastq -@ {threads} -0 {output.singleton} -s /dev/null -n {output.sorted}
+        ) > {log} 2>&1
         """

@@ -57,6 +57,7 @@ rule remove_host:
         """
 
 # Filter host reads from single-end data.
+# FLAG 4 selects unmapped reads; FLAG 8 is mate-unmapped and does not apply to unpaired reads.
 rule remove_host_sing:
     input:
         singleton="data/reads_trim/{sample}_sing.fastq.gz",
@@ -77,7 +78,7 @@ rule remove_host_sing:
         (
         bowtie2 -p {threads} -x {params.index} -U {input.singleton} -S /dev/stdout \
             | samtools view -bS - > {output.bam}
-        samtools view -b -f 12 -F 256 {output.bam} > {output.unmapped}
+        samtools view -b -f 4 -F 256 {output.bam} > {output.unmapped}
         samtools sort -n -m 5G -@ {threads} {output.unmapped} -o {output.sorted}
         samtools fastq -@ {threads} -0 {output.singleton} -s /dev/null -n {output.sorted}
         ) > {log} 2>&1

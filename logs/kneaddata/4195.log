@@ -1,0 +1,77 @@
+09/28/2026 04:12:45 PM - kneaddata.knead_data - INFO: Running kneaddata v0.12.4
+09/28/2026 04:12:45 PM - kneaddata.knead_data - INFO: Output files will be written to: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195
+09/28/2026 04:12:45 PM - kneaddata.knead_data - DEBUG: Running with the following arguments: 
+verbose = False
+input1 = data/reads_raw/4195_R1.fastq.gz
+input2 = data/reads_raw/4195_R2.fastq.gz
+unpaired = None
+output_dir = /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195
+scratch_dir = 
+reference_db = /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9
+bypass_trim = False
+output_prefix = 4195_kneaddata
+threads = 16
+processes = 1
+trimmomatic_quality_scores = -phred33
+bmtagger = False
+bypass_trf = True
+run_trf = False
+fastqc_start = True
+fastqc_end = True
+store_temp_output = False
+remove_intermediate_output = True
+cat_final_output = False
+log_level = DEBUG
+log = logs/kneaddata/4195.log
+trimmomatic_path = /opt/conda/bin/trimmomatic
+run_trim_repetitive = False
+max_memory = 4G
+trimmomatic_options = None
+sequencer_source = NexteraPE
+bowtie2_path = /opt/conda/bin/bowtie2
+bowtie2_options = --very-sensitive-local --phred33
+decontaminate_pairs = strict
+reorder = True
+serial = True
+bmtagger_path = None
+trf_path = None
+match = 2
+mismatch = 7
+delta = 7
+pm = 80
+pi = 10
+minscore = 50
+maxperiod = 500
+fastqc_path = /opt/conda/bin/fastqc
+remove_temp_output = True
+input = /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/reads_raw/4195_R1.fastq.gz /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/reads_raw/4195_R2.fastq.gz
+discordant = True
+
+09/28/2026 04:12:45 PM - kneaddata.utilities - INFO: Decompressing gzipped file ...
+09/28/2026 04:13:58 PM - kneaddata.utilities - INFO: Decompressed file created: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/decompressed_t93qyw0u_4195_R1.fastq
+09/28/2026 04:13:58 PM - kneaddata.utilities - INFO: Decompressing gzipped file ...
+09/28/2026 04:15:10 PM - kneaddata.utilities - INFO: Decompressed file created: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/decompressed_o9zjeij6_4195_R2.fastq
+09/28/2026 04:15:10 PM - kneaddata.utilities - INFO: Reformatting file sequence identifiers ...
+09/28/2026 04:16:23 PM - kneaddata.utilities - INFO: Reformatting file sequence identifiers ...
+09/28/2026 04:18:04 PM - kneaddata.utilities - INFO: READ COUNT: raw pair1 : Initial number of reads ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/reformatted_identifiersxj86l28n_decompressed_t93qyw0u_4195_R1.fastq ): 22526748.0
+09/28/2026 04:18:30 PM - kneaddata.utilities - INFO: READ COUNT: raw pair2 : Initial number of reads ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/reformatted_identifiersat_negkr_decompressed_o9zjeij6_4195_R2.fastq ): 22526748.0
+09/28/2026 04:18:30 PM - kneaddata.utilities - DEBUG: Creating output directory: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/fastqc
+09/28/2026 04:18:30 PM - kneaddata.utilities - DEBUG: Checking input file to fastqc : /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/reads_raw/4195_R1.fastq.gz
+09/28/2026 04:18:30 PM - kneaddata.utilities - DEBUG: Checking input file to fastqc : /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/reads_raw/4195_R2.fastq.gz
+09/28/2026 04:18:30 PM - kneaddata.utilities - INFO: Running fastqc ... 
+09/28/2026 04:18:30 PM - kneaddata.utilities - INFO: Execute command: /opt/conda/bin/fastqc /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/reads_raw/4195_R1.fastq.gz /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/reads_raw/4195_R2.fastq.gz --threads 16 --outdir /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/fastqc --extract
+09/28/2026 04:22:41 PM - kneaddata.utilities - DEBUG: b'application/gzip\nStarted analysis of 4195_R1.fastq.gz\napplication/gzip\nStarted analysis of 4195_R2.fastq.gz\nApprox 5% complete for 4195_R1.fastq.gz\nApprox 5% complete for 4195_R2.fastq.gz\nApprox 10% complete for 4195_R1.fastq.gz\nApprox 10% complete for 4195_R2.fastq.gz\nApprox 15% complete for 4195_R1.fastq.gz\nApprox 15% complete for 4195_R2.fastq.gz\nApprox 20% complete for 4195_R1.fastq.gz\nApprox 20% complete for 4195_R2.fastq.gz\nApprox 25% complete for 4195_R1.fastq.gz\nApprox 25% complete for 4195_R2.fastq.gz\nApprox 30% complete for 4195_R1.fastq.gz\nApprox 30% complete for 4195_R2.fastq.gz\nApprox 35% complete for 4195_R1.fastq.gz\nApprox 35% complete for 4195_R2.fastq.gz\nApprox 40% complete for 4195_R1.fastq.gz\nApprox 40% complete for 4195_R2.fastq.gz\nApprox 45% complete for 4195_R1.fastq.gz\nApprox 45% complete for 4195_R2.fastq.gz\nApprox 50% complete for 4195_R1.fastq.gz\nApprox 50% complete for 4195_R2.fastq.gz\nApprox 55% complete for 4195_R1.fastq.gz\nApprox 55% complete for 4195_R2.fastq.gz\nApprox 60% complete for 4195_R1.fastq.gz\nApprox 60% complete for 4195_R2.fastq.gz\nApprox 65% complete for 4195_R1.fastq.gz\nApprox 65% complete for 4195_R2.fastq.gz\nApprox 70% complete for 4195_R1.fastq.gz\nApprox 70% complete for 4195_R2.fastq.gz\nApprox 75% complete for 4195_R1.fastq.gz\nApprox 75% complete for 4195_R2.fastq.gz\nApprox 80% complete for 4195_R1.fastq.gz\nApprox 80% complete for 4195_R2.fastq.gz\nApprox 85% complete for 4195_R1.fastq.gz\nApprox 85% complete for 4195_R2.fastq.gz\nApprox 90% complete for 4195_R1.fastq.gz\nApprox 90% complete for 4195_R2.fastq.gz\nApprox 95% complete for 4195_R1.fastq.gz\nApprox 95% complete for 4195_R2.fastq.gz\nAnalysis complete for 4195_R1.fastq.gz\nAnalysis complete for 4195_R2.fastq.gz\n'
+09/28/2026 04:22:41 PM - kneaddata.utilities - DEBUG: Checking input file to Trimmomatic : /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/reformatted_identifiersxj86l28n_decompressed_t93qyw0u_4195_R1.fastq
+09/28/2026 04:22:41 PM - kneaddata.utilities - DEBUG: Checking input file to Trimmomatic : /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/reformatted_identifiersat_negkr_decompressed_o9zjeij6_4195_R2.fastq
+09/28/2026 04:22:41 PM - kneaddata.utilities - INFO: Running Trimmomatic ... 
+09/28/2026 04:22:41 PM - kneaddata.utilities - INFO: Execute command: /opt/conda/bin/trimmomatic PE -threads 16 -phred33 /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/reformatted_identifiersxj86l28n_decompressed_t93qyw0u_4195_R1.fastq /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/reformatted_identifiersat_negkr_decompressed_o9zjeij6_4195_R2.fastq /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.1.fastq /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.single.1.fastq /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.2.fastq /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.single.2.fastq MINLEN:60 ILLUMINACLIP:/opt/conda/lib/python3.14/site-packages/kneaddata/adapters/NexteraPE-PE.fa:2:30:10:8:TRUE SLIDINGWINDOW:4:20 MINLEN:75
+09/28/2026 04:33:33 PM - kneaddata.utilities - DEBUG: b"TrimmomaticPE: Started with arguments:\n -threads 16 -phred33 /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/reformatted_identifiersxj86l28n_decompressed_t93qyw0u_4195_R1.fastq /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/reformatted_identifiersat_negkr_decompressed_o9zjeij6_4195_R2.fastq /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.1.fastq /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.single.1.fastq /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.2.fastq /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.single.2.fastq MINLEN:60 ILLUMINACLIP:/opt/conda/lib/python3.14/site-packages/kneaddata/adapters/NexteraPE-PE.fa:2:30:10:8:TRUE SLIDINGWINDOW:4:20 MINLEN:75\nILLUMINACLIP: Using adapter file from user-specified absolute path: /opt/conda/lib/python3.14/site-packages/kneaddata/adapters/NexteraPE-PE.fa\nUsing PrefixPair: 'AGATGTGTATAAGAGACAG' and 'AGATGTGTATAAGAGACAG'\nUsing Long Clipping Sequence: 'GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG'\nUsing Long Clipping Sequence: 'TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG'\nUsing Long Clipping Sequence: 'CTGTCTCTTATACACATCTCCGAGCCCACGAGAC'\nUsing Long Clipping Sequence: 'CTGTCTCTTATACACATCTGACGCTGCCGACGA'\nILLUMINACLIP: Using 1 prefix pairs, 4 forward/reverse sequences, 0 forward only sequences, 0 reverse only sequences\nInput Read Pairs: 22526748 Both Surviving: 20692499 (91.86%) Forward Only Surviving: 761733 (3.38%) Reverse Only Surviving: 510111 (2.26%) Dropped: 562405 (2.50%)\nTrimmomaticPE: Completed successfully\n"
+09/28/2026 04:33:33 PM - kneaddata.utilities - DEBUG: Checking output file from Trimmomatic : /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.1.fastq
+09/28/2026 04:33:33 PM - kneaddata.utilities - DEBUG: Checking output file from Trimmomatic : /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.single.1.fastq
+09/28/2026 04:33:33 PM - kneaddata.utilities - DEBUG: Checking output file from Trimmomatic : /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.2.fastq
+09/28/2026 04:33:33 PM - kneaddata.utilities - DEBUG: Checking output file from Trimmomatic : /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.single.2.fastq
+09/28/2026 04:33:58 PM - kneaddata.utilities - INFO: READ COUNT: trimmed pair1 : Total reads after trimming ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.1.fastq ): 20692499.0
+09/28/2026 04:34:22 PM - kneaddata.utilities - INFO: READ COUNT: trimmed pair2 : Total reads after trimming ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.2.fastq ): 20692499.0
+09/28/2026 04:34:23 PM - kneaddata.utilities - INFO: READ COUNT: trimmed orphan1 : Total reads after trimming ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.single.1.fastq ): 761733.0
+09/28/2026 04:34:24 PM - kneaddata.utilities - INFO: READ COUNT: trimmed orphan2 : Total reads after trimming ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/4195/4195_kneaddata.trimmed.single.2.fastq ): 510111.0
+09/28/2026 04:34:24 PM - kneaddata.run - INFO: Decontaminating ...

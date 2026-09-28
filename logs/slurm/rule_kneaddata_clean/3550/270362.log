@@ -1,0 +1,63 @@
+host: bld18
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided remote nodes: 1
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 28 16:13:07 2026]
+rule kneaddata_clean:
+    input: data/reads_raw/3550_R1.fastq.gz, data/reads_raw/3550_R2.fastq.gz, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.1.bt2, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.2.bt2, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.3.bt2, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.4.bt2, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.rev.1.bt2, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.rev.2.bt2
+    output: data/kneaddata/3550/3550_kneaddata_paired_1.fastq, data/kneaddata/3550/3550_kneaddata_paired_2.fastq, data/kneaddata/3550/3550_kneaddata_unmatched_1.fastq, data/kneaddata/3550/3550_kneaddata_unmatched_2.fastq
+    log: logs/kneaddata/3550.log
+    jobid: 0
+    benchmark: benchmarks/kneaddata/3550.tsv
+    reason: Forced execution
+    wildcards: sample=3550
+    threads: 16
+    resources: tmpdir=<TBD>, disk_mb=11047, disk=11.05 GB, disk_mib=10536, mem_mb=32000, mem=32 GB, mem_mib=30518, slurm_account=applicata, slurm_qos=normal, runtime=240, slurm_requeue=false
+Shell command: 
+        kneaddata             --input1 data/reads_raw/3550_R1.fastq.gz             --input2 data/reads_raw/3550_R2.fastq.gz             --output data/kneaddata/3550             --output-prefix 3550_kneaddata             --reference-db /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9             --threads 16             --processes 1             --max-memory 4G             --sequencer-source NexteraPE             --quality-scores phred33             --bowtie2-options="--very-sensitive-local"             --decontaminate-pairs strict             --reorder             --bypass-trf             --remove-intermediate-output             --run-fastqc-start             --run-fastqc-end             --log logs/kneaddata/3550.log
+        
+host: bld18
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 28 16:13:27 2026]
+localrule kneaddata_clean:
+    input: data/reads_raw/3550_R1.fastq.gz, data/reads_raw/3550_R2.fastq.gz, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.1.bt2, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.2.bt2, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.3.bt2, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.4.bt2, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.rev.1.bt2, /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9.rev.2.bt2
+    output: data/kneaddata/3550/3550_kneaddata_paired_1.fastq, data/kneaddata/3550/3550_kneaddata_paired_2.fastq, data/kneaddata/3550/3550_kneaddata_unmatched_1.fastq, data/kneaddata/3550/3550_kneaddata_unmatched_2.fastq
+    log: logs/kneaddata/3550.log
+    jobid: 0
+    benchmark: benchmarks/kneaddata/3550.tsv
+    reason: Forced execution
+    wildcards: sample=3550
+    threads: 16
+    resources: tmpdir=/mnt/local_data/270362, mem_mb=32000, mem=32 GB, mem_mib=30518, disk_mb=11047, disk=11.05 GB, disk_mib=10536, slurm_account=applicata, slurm_qos=normal, runtime=240, slurm_requeue=false
+Shell command: 
+        kneaddata             --input1 data/reads_raw/3550_R1.fastq.gz             --input2 data/reads_raw/3550_R2.fastq.gz             --output data/kneaddata/3550             --output-prefix 3550_kneaddata             --reference-db /archive/extra/daniel.remondini2/bioinf_db/databases/bostaurus_bosTau9_bowtie2/bosTau9             --threads 16             --processes 1             --max-memory 4G             --sequencer-source NexteraPE             --quality-scores phred33             --bowtie2-options="--very-sensitive-local"             --decontaminate-pairs strict             --reorder             --bypass-trf             --remove-intermediate-output             --run-fastqc-start             --run-fastqc-end             --log logs/kneaddata/3550.log
+        
+Activating singularity image /archive/extra/daniel.remondini2/bioinf_db/containers/kneaddata/0.12.4/kneaddata_0.12.4.sif
+INFO:    fuse: warning: library too old, some operations may not work
+INFO:    underlay of /etc/localtime required more than 50 (79) bind mounts
+Decompressing gzipped file ...
+
+Decompressing gzipped file ...
+
+Reformatting file sequence identifiers ...
+
+Reformatting file sequence identifiers ...
+
+Initial number of reads ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/3550/reformatted_identifiers3m91txjy_decompressed_r6w0ld0c_3550_R1.fastq ): 9238443.0
+Initial number of reads ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/3550/reformatted_identifierswzycir33_decompressed_jl391jwk_3550_R2.fastq ): 9238443.0
+Running fastqc ... 
+Running Trimmomatic ... 
+Total reads after trimming ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/3550/3550_kneaddata.trimmed.1.fastq ): 7076791.0
+Total reads after trimming ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/3550/3550_kneaddata.trimmed.2.fastq ): 7076791.0
+Total reads after trimming ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/3550/3550_kneaddata.trimmed.single.1.fastq ): 937541.0
+Total reads after trimming ( /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/data/kneaddata/3550/3550_kneaddata.trimmed.single.2.fastq ): 449233.0
+Decontaminating ...

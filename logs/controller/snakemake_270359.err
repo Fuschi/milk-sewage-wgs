@@ -1,0 +1,30 @@
+Using profile profiles/slurm for setting default command line arguments.
+host: bld02
+Building DAG of jobs...
+You are running snakemake in a SLURM job context. This is not recommended, as it may lead to unexpected behavior. If possible, please run Snakemake directly on the login node.
+SLURM run ID: smk-milk-sewage_2a04cdda-0f97-4a24-9815-385fdfdae2e0
+MinJobAge 300s (>= 120s). 'squeue' should work reliably for status queries.
+Using shell: /usr/bin/bash
+Provided remote nodes: 8
+Job stats:
+job                         count
+------------------------  -------
+kneaddata_clean                67
+compress_kneaddata_reads       67
+kneaddata_read_counts           1
+all                             1
+total                         136
+
+Select jobs to execute...
+Execute 8 jobs...
+No partition was given for rule 'kneaddata_clean', and unable to find a default partition. Trying to submit without partition information. You may want to invoke snakemake with --default-resources 'slurm_partition=<your default partition>'.
+No partition was given for rule 'kneaddata_clean', and unable to find a default partition. Trying to submit without partition information. You may want to invoke snakemake with --default-resources 'slurm_partition=<your default partition>'.
+Select jobs to execute...
+Job 68 has been submitted with SLURM jobid 270360 (log: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/logs/slurm/rule_kneaddata_clean/4195/270360.log).
+Job 62 has been submitted with SLURM jobid 270361 (log: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/logs/slurm/rule_kneaddata_clean/4192/270361.log).
+Job 2 has been submitted with SLURM jobid 270362 (log: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/logs/slurm/rule_kneaddata_clean/3550/270362.log).
+Job 122 has been submitted with SLURM jobid 270363 (log: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/logs/slurm/rule_kneaddata_clean/4447/270363.log).
+Job 108 has been submitted with SLURM jobid 270364 (log: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/logs/slurm/rule_kneaddata_clean/4440/270364.log).
+Job 78 has been submitted with SLURM jobid 270365 (log: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/logs/slurm/rule_kneaddata_clean/4425/270365.log).
+Job 18 has been submitted with SLURM jobid 270366 (log: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/logs/slurm/rule_kneaddata_clean/3558/270366.log).
+Job 48 has been submitted with SLURM jobid 270367 (log: /scratch/applicata/alessandro.fuschi2/milk-sewage-wgs/logs/slurm/rule_kneaddata_clean/3573/270367.log).

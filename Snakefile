@@ -2,19 +2,18 @@ import pandas as pd
 
 configfile: "config/config.yaml"
 
-samples = pd.read_csv(config["samples"], sep="\t", dtype=str)
+samples = pd.read_csv(config["samples"], sep="\t", dtype=str, keep_default_na=False)
+if "sample_id" not in samples.columns or samples.empty:
+    raise ValueError("The sample sheet must have a sample_id column and at least one sample.")
+if samples["sample_id"].duplicated().any():
+    raise ValueError("Duplicate sample_id values in the sample sheet.")
+if not samples["sample_id"].str.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*").all():
+    raise ValueError("Sample IDs must contain only letters, digits, underscores or hyphens.")
 SAMPLES = samples["sample_id"].tolist()
-SAMPLES_BY_BIOME = samples.groupby("biome")["sample_id"].agg(list).to_dict()
 
-# Define workflow targets.
 rule all:
     input:
-        expand("data/reads_clean/{sample}_{read}_clean.fastq.gz", sample=SAMPLES, read=["R1", "R2", "sing"]),
-        expand("tables/read_stats/seqkit_{stage}.tsv", stage=["raw_reads", "trimmed_reads", "cleaned_reads", "cleaned_reads_sing"]),
-        expand("data/assembly/single_sample/{sample}/{sample}.contigs.fa", sample=SAMPLES),
-        expand("data/assembly/coassembly/{biome}/{biome}.contigs.fa", biome=SAMPLES_BY_BIOME)
+        expand("data/kneaddata/{sample}", sample=SAMPLES),
+        expand("tables/read_stats/kneaddata/{sample}.tsv", sample=SAMPLES),
 
 include: "rules/cleaning.smk"
-include: "rules/stats_reads.smk"
-include: "rules/assembly.smk"
-include: "rules/coassembly.smk"

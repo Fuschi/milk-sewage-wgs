@@ -24,7 +24,6 @@ apptainer-args: >-
 default-resources:
   - slurm_account=applicata
   - slurm_qos=normal
-  - cpus_per_task=1
   - runtime=30
   - mem_mb=2000
   - slurm_requeue=false

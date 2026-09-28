@@ -1,85 +1,82 @@
+# Bos taurus Bowtie2 index used by KneadData.
 HOST_INDEX = config["references"]["bostaurus_index"]
-HOST_INDEX_FILES = expand(HOST_INDEX + ".{ext}", ext=["1.bt2", "2.bt2", "3.bt2", "4.bt2", "rev.1.bt2", "rev.2.bt2"])
 
-# Trim reads.
-rule bbduk_trim:
+HOST_INDEX_FILES = [
+    f"{HOST_INDEX}.{suffix}.bt2"
+    for suffix in ("1", "2", "3", "4", "rev.1", "rev.2")
+]
+
+
+# Clean paired-end reads with KneadData:
+# - FastQC before cleaning
+# - adapter/quality trimming with Trimmomatic
+# - Bos taurus host removal with Bowtie2
+# - FastQC after cleaning
+#
+# KneadData also manages reads that become unmatched during trimming/filtering.
+rule kneaddata_clean:
     input:
         r1="data/reads_raw/{sample}_R1.fastq.gz",
         r2="data/reads_raw/{sample}_R2.fastq.gz",
+        index=HOST_INDEX_FILES
     output:
-        r1=protected("data/reads_trim/{sample}_R1_trim.fastq.gz"),
-        r2=protected("data/reads_trim/{sample}_R2_trim.fastq.gz"),
-        singleton=protected("data/reads_trim/{sample}_sing.fastq.gz"),
-        stats=protected("data/reads_trim/{sample}_stats.txt"),
-    params: adapters=config["references"]["adapters"]
-    log: "logs/bbduk_trim/{sample}.log"
-    benchmark: "benchmarks/bbduk_trim/{sample}.tsv"
-    threads: 4
-    resources: mem_mb=15000, runtime=30
-    container: config["containers"]["bbmap"]
+        reads=directory("data/kneaddata/{sample}")
+    params:
+        index=HOST_INDEX,
+        prefix="{sample}_kneaddata"
+    threads: 8
+    resources:
+        mem_mb=32000,
+        runtime=240
+    container:
+        config["containers"]["kneaddata"]
+    log:
+        "logs/kneaddata/{sample}.log"
+    benchmark:
+        "benchmarks/kneaddata/{sample}.tsv"
     shell:
         """
-        bbduk.sh -Xmx14g threads={threads} \
-            in1={input.r1} in2={input.r2} \
-            out1={output.r1} out2={output.r2} \
-            outs={output.singleton} stats={output.stats} \
-            ref={params.adapters} ktrim=r k=23 mink=11 hdist=1 tpe tbo \
-            qtrim=rl trimq=10 ow=t ziplevel=6 > {log} 2>&1
+        kneaddata \
+            --input1 {input.r1} \
+            --input2 {input.r2} \
+            --output {output.reads} \
+            --output-prefix {params.prefix} \
+            --reference-db {params.index} \
+            --threads {threads} \
+            --processes 1 \
+            --max-memory 4G \
+            --sequencer-source NexteraPE \
+            --quality-scores phred33 \
+            --bowtie2-options="--very-sensitive-local" \
+            --decontaminate-pairs strict \
+            --reorder \
+            --bypass-trf \
+            --remove-intermediate-output \
+            --run-fastqc-start \
+            --run-fastqc-end \
+            > {log} 2>&1
         """
 
-# Filter host reads from paired-end data.
-rule remove_host:
-    input:
-        r1="data/reads_trim/{sample}_R1_trim.fastq.gz",
-        r2="data/reads_trim/{sample}_R2_trim.fastq.gz",
-        index=HOST_INDEX_FILES,
-    output:
-        r1=protected("data/reads_clean/{sample}_R1_clean.fastq.gz"),
-        r2=protected("data/reads_clean/{sample}_R2_clean.fastq.gz"),
-        bam=temp("data/reads_clean/{sample}_hostaligned.bam"),
-        unmapped=temp("data/reads_clean/{sample}_unmapped.bam"),
-        sorted=protected("data/reads_clean/{sample}_unmapped_sorted.bam"),
-    params: index=HOST_INDEX
-    log: "logs/remove_host/{sample}.log"
-    benchmark: "benchmarks/remove_host/{sample}.tsv"
-    threads: 4
-    resources: mem_mb=64000, runtime=180
-    container: config["containers"]["hostremoval"]
-    shell:
-        """
-        (
-        bowtie2 -p {threads} -x {params.index} -1 {input.r1} -2 {input.r2} -S /dev/stdout \
-            | samtools view -bS - > {output.bam}
-        samtools view -b -f 12 -F 256 {output.bam} > {output.unmapped}
-        samtools sort -n -m 5G -@ {threads} {output.unmapped} -o {output.sorted}
-        samtools fastq -@ {threads} -1 {output.r1} -2 {output.r2} -0 /dev/null -s /dev/null -n {output.sorted}
-        ) > {log} 2>&1
-        """
 
-# Filter host reads from single-end data.
-# FLAG 4 selects unmapped reads; FLAG 8 is mate-unmapped and does not apply to unpaired reads.
-rule remove_host_sing:
+# Generate a single read-count summary for all samples.
+rule kneaddata_read_counts:
     input:
-        singleton="data/reads_trim/{sample}_sing.fastq.gz",
-        index=HOST_INDEX_FILES,
+        logs=expand("logs/kneaddata/{sample}.log", sample=SAMPLES)
     output:
-        singleton=protected("data/reads_clean/{sample}_sing_clean.fastq.gz"),
-        bam=temp("data/reads_clean/{sample}_sing_hostaligned.bam"),
-        unmapped=temp("data/reads_clean/{sample}_sing_unmapped.bam"),
-        sorted=protected("data/reads_clean/{sample}_sing_unmapped_sorted.bam"),
-    params: index=HOST_INDEX
-    log: "logs/remove_host/{sample}_sing.log"
-    benchmark: "benchmarks/remove_host/{sample}_sing.tsv"
-    threads: 4
-    resources: mem_mb=64000, runtime=180
-    container: config["containers"]["hostremoval"]
+        "tables/read_stats/kneaddata_read_counts.tsv"
+    resources:
+        mem_mb=2000,
+        runtime=10
+    container:
+        config["containers"]["kneaddata"]
+    log:
+        "logs/kneaddata/read_counts.log"
+    benchmark:
+        "benchmarks/kneaddata/read_counts.tsv"
     shell:
         """
-        (
-        bowtie2 -p {threads} -x {params.index} -U {input.singleton} -S /dev/stdout \
-            | samtools view -bS - > {output.bam}
-        samtools view -b -f 4 -F 256 {output.bam} > {output.unmapped}
-        samtools sort -n -m 5G -@ {threads} {output.unmapped} -o {output.sorted}
-        samtools fastq -@ {threads} -0 {output.singleton} -s /dev/null -n {output.sorted}
-        ) > {log} 2>&1
+        kneaddata_read_count_table \
+            --input {input.logs} \
+            --output {output} \
+            > {log} 2>&1
         """

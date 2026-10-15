@@ -89,3 +89,47 @@ rule vamb_multisample:
         done
         """
 
+# COMEBin: biome coassembly with coverage from all samples.
+rule comebin_coassembly:
+    input:
+        contigs="data/assembly/coassembly/{biome}/{biome}.contigs.fa",
+        bams=lambda wc: [f"data/contig_mapping/coassembly/{wc.biome}/{s}.sorted.bam" for s in SAMPLES_BY_BIOME[wc.biome]],
+        bais=lambda wc: [f"data/contig_mapping/coassembly/{wc.biome}/{s}.sorted.bam.bai" for s in SAMPLES_BY_BIOME[wc.biome]]
+    output:
+        assignments="data/binning/comebin/coassembly/{biome}/comebin_res/comebin_res.tsv",
+        bins=directory("data/binning/comebin/coassembly/{biome}/comebin_res/comebin_res_bins")
+    params:
+        bamdir="data/contig_mapping/coassembly/{biome}",
+        outdir="data/binning/comebin/coassembly/{biome}",
+        seed=42
+    threads: 64
+    resources: mem_mb=900000, runtime=1440, gpu_slot=1, slurm_partition="g1", slurm_extra="--reservation=prj-veo --exclusive"
+    container: config["containers"]["comebin_gpu"]
+    log: "logs/binning/comebin/coassembly/{biome}.log"
+    benchmark: "benchmarks/binning/comebin/coassembly/{biome}.tsv"
+    shell:
+        """
+        CUDA_VISIBLE_DEVICES=0 run_comebin.sh -a {input.contigs} -p {params.bamdir} -o {params.outdir} -d cuda -s {params.seed} -t {threads} > {log} 2>&1
+        """
+
+
+# SemiBin2: biome coassembly with multi-sample coverage.
+rule semibin2_coassembly:
+    input:
+        contigs="data/assembly/coassembly/{biome}/{biome}.contigs.fa",
+        bams=lambda wc: [f"data/contig_mapping/coassembly/{wc.biome}/{s}.sorted.bam" for s in SAMPLES_BY_BIOME[wc.biome]],
+        bais=lambda wc: [f"data/contig_mapping/coassembly/{wc.biome}/{s}.sorted.bam.bai" for s in SAMPLES_BY_BIOME[wc.biome]]
+    output:
+        bins=directory("data/binning/semibin2/coassembly/{biome}/output_bins")
+    params:
+        outdir="data/binning/semibin2/coassembly/{biome}",
+        seed=42
+    threads: 64
+    resources: mem_mb=900000, runtime=1440, gpu_slot=1, slurm_partition="g1", slurm_extra="--reservation=prj-veo --exclusive"
+    container: config["containers"]["semibin2_gpu"]
+    log: "logs/binning/semibin2/coassembly/{biome}.log"
+    benchmark: "benchmarks/binning/semibin2/coassembly/{biome}.tsv"
+    shell:
+        """
+        CUDA_VISIBLE_DEVICES=0 SemiBin2 single_easy_bin -i {input.contigs} -b {input.bams} -o {params.outdir} --self-supervised --engine gpu --compression none --minfasta-kbs 200 -p {threads} --random-seed {params.seed} > {log} 2>&1
+        """

@@ -1,3 +1,4 @@
+# Configuration
 import pandas as pd
 
 configfile: "config/config.yaml"
@@ -7,27 +8,30 @@ SAMPLES = metadata["sample_id"].tolist()
 SAMPLES_BY_BIOME = metadata.groupby("biome")["sample_id"].apply(list).to_dict()
 BIOMES = list(SAMPLES_BY_BIOME)
 
+# -----------------------------------------------------------------------------
+
+# Workflow targets
 rule all:
     input:
-        # cleaning
+        # Cleaning
         "tables/kneaddata_read_counts.tsv",
 
-        # sourmash
+        # Sourmash
         expand("results/sourmash/{sm_group}/{sm_metric}/distance.mat.matrix.png",
                sm_group=["all", "milk", "sewage"], sm_metric=["angular", "jaccard"]),
         expand("results/sourmash/{sm_group}/{sm_metric}/distance.mat.dendro.png",
                sm_group=["all", "milk", "sewage"], sm_metric=["angular", "jaccard"]),
 
-        # assembly
+        # Assembly QC
         expand("data/assembly/metaquast/sample/{sample}/report.tsv", sample=SAMPLES),
         expand("data/assembly/metaquast/coassembly/{biome}/report.tsv", biome=BIOMES),
 
-        # mapping - individual assemblies
+        # Mapping: individual assemblies
         expand("data/contig_mapping/sample/{sample}/{sample}.sorted.bam", sample=SAMPLES),
         expand("data/contig_mapping/sample/{sample}/{sample}.sorted.bam.bai", sample=SAMPLES),
         expand("data/contig_mapping/sample/{sample}/{sample}.coverage.tsv", sample=SAMPLES),
 
-        # mapping - biome coassemblies
+        # Mapping: biome coassemblies
         [f"data/contig_mapping/coassembly/{biome}/{sample}.sorted.bam"
          for biome, samples in SAMPLES_BY_BIOME.items() for sample in samples],
         [f"data/contig_mapping/coassembly/{biome}/{sample}.sorted.bam.bai"
@@ -35,7 +39,7 @@ rule all:
         [f"data/contig_mapping/coassembly/{biome}/{sample}.coverage.tsv"
          for biome, samples in SAMPLES_BY_BIOME.items() for sample in samples],
 
-        # mapping - concatenated individual assemblies
+        # Mapping: concatenated assemblies
         [f"data/contig_mapping/multisample/{biome}/{sample}.sorted.bam"
          for biome, samples in SAMPLES_BY_BIOME.items() for sample in samples],
         [f"data/contig_mapping/multisample/{biome}/{sample}.sorted.bam.bai"
@@ -43,14 +47,22 @@ rule all:
         [f"data/contig_mapping/multisample/{biome}/{sample}.coverage.tsv"
          for biome, samples in SAMPLES_BY_BIOME.items() for sample in samples],
 
-        # binning - COMEBin
+        # Binning: COMEBin
         expand("data/binning/comebin/sample/{sample}/status.tsv", sample=SAMPLES),
-        # binning - SemiBin2
+        expand("data/binning/comebin/coassembly/{biome}/comebin_res/comebin_res.tsv", biome=BIOMES),
+        expand("data/binning/comebin/coassembly/{biome}/comebin_res/comebin_res_bins", biome=BIOMES),
+
+        # Binning: SemiBin2
         expand("data/binning/semibin2/multisample/{biome}/status.tsv", biome=BIOMES),
-        # binning - VAMB
+        expand("data/binning/semibin2/coassembly/{biome}/output_bins", biome=BIOMES),
+
+        # Binning: VAMB
         expand("data/binning/vamb/multisample/{biome}/status.tsv", biome=BIOMES),
         expand("data/binning/vamb/multisample/{biome}/run", biome=BIOMES)
 
+# -----------------------------------------------------------------------------
+
+# Workflow rules
 include: "rules/cleaning.smk"
 include: "rules/sourmash.smk"
 include: "rules/assembly.smk"

@@ -27,5 +27,5 @@ set -euo pipefail
 source ~/miniforge3/etc/profile.d/conda.sh
 conda activate snakemake-slurm
 
-snakemake --profile profiles/slurm
+snakemake --profile profiles/slurm --rerun-triggers mtime
 JOB

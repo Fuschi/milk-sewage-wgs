@@ -14,6 +14,11 @@ apptainer-args: >-
   --bind /scratch:/scratch
   --bind /archive:/archive
   --cleanenv
+  --nv
+  --env CHECKM_DATA_PATH=/archive/extra/daniel.remondini2/bioinf_db/databases/checkm1
+
+resources:
+  - gpu_slot=1
 
 default-resources:
   - slurm_account=applicata

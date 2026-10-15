@@ -5,6 +5,7 @@
 /.apptainer/
 /.snakemake-apptainer/
 *.sif
+logs/
 
 # Local software and caches
 .env/
@@ -20,3 +21,6 @@ __pycache__/
 .Ruserdata
 .Rproj.user/
 .DS_Store
+
+.java/
+.cache/

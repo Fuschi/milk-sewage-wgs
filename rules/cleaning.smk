@@ -17,8 +17,8 @@ rule kneaddata_clean:
         prefix="{sample}_kneaddata"
     threads: 16
     resources:
-        mem_mb=32000,
-        runtime=240
+        mem_mb=16000,
+        runtime=360
     container:
         config["containers"]["kneaddata"]
     log:
@@ -53,12 +53,20 @@ rule compress_kneaddata_reads:
         r1="data/kneaddata/{sample}/{sample}_kneaddata_paired_1.fastq",
         r2="data/kneaddata/{sample}/{sample}_kneaddata_paired_2.fastq",
         sing1="data/kneaddata/{sample}/{sample}_kneaddata_unmatched_1.fastq",
-        sing2="data/kneaddata/{sample}/{sample}_kneaddata_unmatched_2.fastq"
+        sing2="data/kneaddata/{sample}/{sample}_kneaddata_unmatched_2.fastq",
+        contam_r1="data/kneaddata/{sample}/{sample}_kneaddata_bosTau9_bowtie2_paired_contam_1.fastq",
+        contam_r2="data/kneaddata/{sample}/{sample}_kneaddata_bosTau9_bowtie2_paired_contam_2.fastq",
+        contam_sing1="data/kneaddata/{sample}/{sample}_kneaddata_bosTau9_bowtie2_unmatched_1_contam.fastq",
+        contam_sing2="data/kneaddata/{sample}/{sample}_kneaddata_bosTau9_bowtie2_unmatched_2_contam.fastq"
     output:
         r1="data/kneaddata/{sample}/{sample}_kneaddata_paired_1.fastq.gz",
         r2="data/kneaddata/{sample}/{sample}_kneaddata_paired_2.fastq.gz",
         sing1="data/kneaddata/{sample}/{sample}_kneaddata_unmatched_1.fastq.gz",
-        sing2="data/kneaddata/{sample}/{sample}_kneaddata_unmatched_2.fastq.gz"
+        sing2="data/kneaddata/{sample}/{sample}_kneaddata_unmatched_2.fastq.gz",
+        contam_r1="data/kneaddata/{sample}/{sample}_kneaddata_bosTau9_bowtie2_paired_contam_1.fastq.gz",
+        contam_r2="data/kneaddata/{sample}/{sample}_kneaddata_bosTau9_bowtie2_paired_contam_2.fastq.gz",
+        contam_sing1="data/kneaddata/{sample}/{sample}_kneaddata_bosTau9_bowtie2_unmatched_1_contam.fastq.gz",
+        contam_sing2="data/kneaddata/{sample}/{sample}_kneaddata_bosTau9_bowtie2_unmatched_2_contam.fastq.gz"
     threads: 8
     resources:
         mem_mb=4000,
@@ -71,6 +79,11 @@ rule compress_kneaddata_reads:
         pigz -p {threads} -c {input.r2} > {output.r2}
         pigz -p {threads} -c {input.sing1} > {output.sing1}
         pigz -p {threads} -c {input.sing2} > {output.sing2}
+
+        pigz -p {threads} -c {input.contam_r1} > {output.contam_r1}
+        pigz -p {threads} -c {input.contam_r2} > {output.contam_r2}
+        pigz -p {threads} -c {input.contam_sing1} > {output.contam_sing1}
+        pigz -p {threads} -c {input.contam_sing2} > {output.contam_sing2}
         """
 
 rule kneaddata_read_counts:

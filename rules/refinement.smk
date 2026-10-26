@@ -50,6 +50,7 @@ rule dastool_coassembly_inputs:
         """
 
 # Refine sample bins from COMEBin, SemiBin2 and VAMB.
+# Refine sample bins and record runs without results.
 rule dastool_sample:
     input:
         contigs="data/assembly/sample/{sample}/{sample}.contigs.fa",
@@ -59,7 +60,8 @@ rule dastool_sample:
     output:
         summary="data/refinement/dastool/sample/{sample}/{sample}_DASTool_summary.tsv",
         assignments="data/refinement/dastool/sample/{sample}/{sample}_DASTool_contig2bin.tsv",
-        bins=directory("data/refinement/dastool/sample/{sample}/{sample}_DASTool_bins")
+        bins=directory("data/refinement/dastool/sample/{sample}/{sample}_DASTool_bins"),
+        status="data/refinement/dastool/sample/{sample}/status.tsv"
     params: prefix="data/refinement/dastool/sample/{sample}/{sample}"
     threads: 16
     resources: mem_mb=32000, runtime=240
@@ -68,7 +70,22 @@ rule dastool_sample:
     benchmark: "benchmarks/refinement/dastool/sample/{sample}.tsv"
     shell:
         """
-        DAS_Tool -i {input.comebin},{input.semibin2},{input.vamb} -l comebin,semibin2,vamb -c {input.contigs} -o {params.prefix} -t {threads} --search_engine diamond --score_threshold 0.5 --write_bins --write_bin_evals > {log} 2>&1
+        if [[ ! -s {input.comebin} && ! -s {input.semibin2} && ! -s {input.vamb} ]]; then
+            status=no_input_bins
+            echo "No input bins available." > {log}
+        elif DAS_Tool -i {input.comebin},{input.semibin2},{input.vamb} -l comebin,semibin2,vamb -c {input.contigs} -o {params.prefix} -t {threads} --search_engine diamond --score_threshold 0.5 --write_bins --write_bin_evals > {log} 2>&1; then
+            status=success
+        elif grep -Fq "No bins with bin-score" {log}; then
+            status=no_bins_above_threshold
+        else
+            exit 1
+        fi
+        if [[ "$status" != success ]]; then
+            : > {output.summary}
+            : > {output.assignments}
+            mkdir -p {output.bins}
+        fi
+        printf 'sample\\tstatus\\n%s\\t%s\\n' '{wildcards.sample}' "$status" > {output.status}
         """
 
 # Refine coassembly bins from COMEBin and SemiBin2.

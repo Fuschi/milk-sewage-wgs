@@ -23,6 +23,16 @@ rule all:
         expand("results/sourmash/{sm_group}/{sm_metric}/distance.mat.dendro.png",
                sm_group=["all", "milk", "sewage"], sm_metric=["angular", "jaccard"]),
 
+        # Reads profiling: AMR
+        expand("data/reads_profiling/amr/resfinder/{sample}/{sample}.res", sample=SAMPLES),
+        expand("data/reads_profiling/amr/resfinder/{sample}/{sample}.mapstat", sample=SAMPLES),
+        # Reads profiling: Virulence
+        expand("data/reads_profiling/amr/resfinder/{sample}/{sample}.quantification.{table}.tsv", sample=SAMPLES, table=["all", "filtered"]),
+        expand("data/reads_profiling/virulence/vfdb/{sample}/{sample}.quantification.{table}.tsv", sample=SAMPLES, table=["all", "filtered"]),
+        # Read profiling: summaries
+        expand("tables/reads_profiling/{database}_{table}.tsv", database=["resfinder", "vfdb"], table=["abundance", "metadata"]),
+
+
         # Assembly QC
         expand("data/assembly/metaquast/sample/{sample}/report.tsv", sample=SAMPLES),
         expand("data/assembly/metaquast/coassembly/{biome}/report.tsv", biome=BIOMES),
@@ -79,18 +89,29 @@ rule all:
         expand("data/refinement/dastool/sample/{sample}/{sample}_DASTool_summary.tsv", sample=SAMPLES),
         expand("data/refinement/dastool/sample/{sample}/{sample}_DASTool_contig2bin.tsv", sample=SAMPLES),
         expand("data/refinement/dastool/sample/{sample}/{sample}_DASTool_bins", sample=SAMPLES),
+        expand("data/refinement/dastool/sample/{sample}/status.tsv", sample=SAMPLES),
 
         # Refinement: coassembly bins
         expand("data/refinement/dastool/coassembly/{biome}/{biome}_DASTool_summary.tsv", biome=BIOMES),
         expand("data/refinement/dastool/coassembly/{biome}/{biome}_DASTool_contig2bin.tsv", biome=BIOMES),
         expand("data/refinement/dastool/coassembly/{biome}/{biome}_DASTool_bins", biome=BIOMES),
 
+        # Bin quality: samples
+        expand("data/bin_quality/checkm2/sample/{sample}/quality_report.tsv", sample=SAMPLES),
+        expand("data/bin_quality/gunc/sample/{sample}/GUNC.progenomes_3.maxCSS_level.tsv", sample=SAMPLES),
+
+        # Bin quality: coassemblies
+        expand("data/bin_quality/checkm2/coassembly/{biome}/quality_report.tsv", biome=BIOMES),
+        expand("data/bin_quality/gunc/coassembly/{biome}/GUNC.progenomes_3.maxCSS_level.tsv", biome=BIOMES),
+
 # -----------------------------------------------------------------------------
 
 # Workflow rules
 include: "rules/cleaning.smk"
 include: "rules/sourmash.smk"
+include: "rules/reads_profiling.smk"
 include: "rules/assembly.smk"
 include: "rules/contig_mapping.smk"
 include: "rules/binning.smk"
 include: "rules/refinement.smk"
+include: "rules/bin_quality.smk"

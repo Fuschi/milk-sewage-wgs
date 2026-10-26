@@ -122,3 +122,16 @@ rule coassembly_contig_qc:
         metaquast.py {input} -o {params.outdir} -t {threads} \
             --min-contig 200 --max-ref-number 0 --space-efficient > {log} 2>&1
         """
+
+# Aggregate assembly QC.
+rule metaquast_summary:
+    input:
+        sample_reports=expand("data/assembly/metaquast/sample/{sample}/report.tsv", sample=SAMPLES),
+        coassembly_reports=expand("data/assembly/metaquast/coassembly/{biome}/report.tsv", biome=BIOMES),
+        metadata=config["samples"]
+    output:
+        summary="tables/metaquast_summary.tsv"
+    container:
+        config["containers"]["r"]
+    script:
+        "../scripts/aggregate_metaquast.R"

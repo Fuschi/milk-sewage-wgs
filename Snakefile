@@ -7,6 +7,7 @@ metadata = pd.read_csv(config["samples"], sep="\t", dtype=str)
 SAMPLES = metadata["sample_id"].tolist()
 SAMPLES_BY_BIOME = metadata.groupby("biome")["sample_id"].apply(list).to_dict()
 BIOMES = list(SAMPLES_BY_BIOME)
+BIOME_BY_SAMPLE = metadata.set_index("sample_id")["biome"].to_dict()
 
 # -----------------------------------------------------------------------------
 
@@ -25,6 +26,9 @@ rule all:
         # Assembly QC
         expand("data/assembly/metaquast/sample/{sample}/report.tsv", sample=SAMPLES),
         expand("data/assembly/metaquast/coassembly/{biome}/report.tsv", biome=BIOMES),
+
+        # Assembly QC summary
+        "tables/metaquast_summary.tsv",
 
         # Mapping: individual assemblies
         expand("data/contig_mapping/sample/{sample}/{sample}.sorted.bam", sample=SAMPLES),
@@ -51,14 +55,35 @@ rule all:
         expand("data/binning/comebin/sample/{sample}/status.tsv", sample=SAMPLES),
         expand("data/binning/comebin/coassembly/{biome}/comebin_res/comebin_res.tsv", biome=BIOMES),
         expand("data/binning/comebin/coassembly/{biome}/comebin_res/comebin_res_bins", biome=BIOMES),
+        # COMEBin filenames
+        expand("data/binning/comebin/sample/{sample}/bins_renamed.done", sample=SAMPLES),
+        expand("data/binning/comebin/coassembly/{biome}/bins_renamed.done", biome=BIOMES),
 
         # Binning: SemiBin2
         expand("data/binning/semibin2/multisample/{biome}/status.tsv", biome=BIOMES),
         expand("data/binning/semibin2/coassembly/{biome}/output_bins", biome=BIOMES),
+        # SemiBin2 headers
+        expand("data/binning/semibin2/{mode}/{biome}/headers_restored.done", mode=["multisample", "coassembly"], biome=BIOMES),
 
         # Binning: VAMB
         expand("data/binning/vamb/multisample/{biome}/status.tsv", biome=BIOMES),
-        expand("data/binning/vamb/multisample/{biome}/run", biome=BIOMES)
+        expand("data/binning/vamb/multisample/{biome}/run", biome=BIOMES),
+        # VAMB filenames
+        expand("data/binning/vamb/multisample/{biome}/bins_renamed.done", biome=BIOMES),
+
+        # Refinement bin inputs
+        expand("data/refinement/dastool/sample/{sample}/inputs/{tool}.tsv", sample=SAMPLES, tool=["comebin", "semibin2", "vamb"]),
+        expand("data/refinement/dastool/coassembly/{biome}/inputs/{tool}.tsv", biome=BIOMES, tool=["comebin", "semibin2"]),
+
+        # Refinement: sample bins
+        expand("data/refinement/dastool/sample/{sample}/{sample}_DASTool_summary.tsv", sample=SAMPLES),
+        expand("data/refinement/dastool/sample/{sample}/{sample}_DASTool_contig2bin.tsv", sample=SAMPLES),
+        expand("data/refinement/dastool/sample/{sample}/{sample}_DASTool_bins", sample=SAMPLES),
+
+        # Refinement: coassembly bins
+        expand("data/refinement/dastool/coassembly/{biome}/{biome}_DASTool_summary.tsv", biome=BIOMES),
+        expand("data/refinement/dastool/coassembly/{biome}/{biome}_DASTool_contig2bin.tsv", biome=BIOMES),
+        expand("data/refinement/dastool/coassembly/{biome}/{biome}_DASTool_bins", biome=BIOMES),
 
 # -----------------------------------------------------------------------------
 
@@ -68,3 +93,4 @@ include: "rules/sourmash.smk"
 include: "rules/assembly.smk"
 include: "rules/contig_mapping.smk"
 include: "rules/binning.smk"
+include: "rules/refinement.smk"

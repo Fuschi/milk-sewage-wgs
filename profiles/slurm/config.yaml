@@ -22,8 +22,8 @@ resources:
 
 default-resources:
   - slurm_account=applicata
-  - slurm_qos=normal
   - runtime=30
+  - qos=normal
   - mem_mb=2000
   - slurm_requeue=false
 

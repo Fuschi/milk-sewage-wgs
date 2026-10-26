@@ -14,3 +14,5 @@ containers:
   comebin_gpu: /archive/extra/daniel.remondini2/bioinf_db/containers/comebin/1.1.0/comebin_1.1.0_cuda11.8.sif
   semibin2_gpu: /archive/extra/daniel.remondini2/bioinf_db/containers/semibin2/2.5.0/semibin2_2.5.0_cuda11.8.sif
   vamb_gpu: /archive/extra/daniel.remondini2/bioinf_db/containers/vamb/5.0.4/vamb_5.0.4_cuda11.8.sif
+  r: /archive/extra/daniel.remondini2/bioinf_db/containers/r-postprocess/r-postprocess.sif
+  dastool: /archive/extra/daniel.remondini2/bioinf_db/containers/dastool/1.1.7/dastool_1.1.7.sif

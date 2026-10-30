@@ -95,6 +95,7 @@ rule all:
 
         "data/gtdbtk",
         "results/gtdbtk_summary.tsv",
+        "results/ncbi_taxonomy.tsv",
 
         expand("data/coverm_mags/{sample}.tsv", sample=SAMPLES),
         expand("results/abricate_{database}.tsv", database=["resfinder_2.6.0", "vfdb_2026-10-26"]),

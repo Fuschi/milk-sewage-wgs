@@ -8,6 +8,8 @@ references:
   checkm2: /archive/extra/daniel.remondini2/bioinf_db/databases/checkm2/1.1.0/CheckM2_database/uniref100.KO.1.dmnd
   gunc: /archive/extra/daniel.remondini2/bioinf_db/databases/gunc/progenomes_3/gunc_db_progenomes3.dmnd
   gtdbtk: /archive/extra/daniel.remondini2/bioinf_db/databases/gtdb_r232/gtdbtk_r232.squashfs
+  gtdb_ar53_metadata: /archive/extra/daniel.remondini2/bioinf_db/databases/gtdb_r232/ar53_metadata_r232.tsv.gz
+  gtdb_bac120_metadata: /archive/extra/daniel.remondini2/bioinf_db/databases/gtdb_r232/bac120_metadata_r232.tsv.gz
 
 containers:
   kneaddata: /archive/extra/daniel.remondini2/bioinf_db/containers/kneaddata/0.12.4/kneaddata_0.12.4.sif

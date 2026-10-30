@@ -34,8 +34,12 @@ Submit the workflow:
 
 ## Outputs
 
-- `data/`: processed reads and analysis outputs (ignored by Git).
-- `tables/`: summary tables.
-- `results/`: plots and other analysis results.
+- `data/`: processed reads and intermediate tool outputs (ignored by Git).
+  Named directories identify each tool or stage, such as `data/gtdbtk`,
+  `data/drep`, `data/resfinder_reads`, and `data/coverm_mags`.
+- `results/`: summary tables and metadata ready for downstream analysis.
+- `results/sourmash/`: Sourmash matrices and plots.
 - `logs/`: execution logs (ignored by Git).
 - `benchmarks/`: runtime and resource usage.
+
+Existing OPH runs require path migration before using this layout.

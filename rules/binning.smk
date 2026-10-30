@@ -7,11 +7,10 @@ rule comebin_sample:
         contigs="data/assembly/sample/{sample}/{sample}.contigs.fa",
         bam="data/contig_mapping/sample/{sample}/{sample}.sorted.bam",
         bai="data/contig_mapping/sample/{sample}/{sample}.sorted.bam.bai"
-    output:
-        status="data/binning/comebin/sample/{sample}/status.tsv"
+    output: status="data/comebin/sample/{sample}/status.tsv"
     params:
         bamdir="data/contig_mapping/sample/{sample}",
-        outdir="data/binning/comebin/sample/{sample}",
+        outdir="data/comebin/sample/{sample}",
         seed=42
     threads: 16
     resources: mem_mb=128000, runtime=360, gpu_slot=1, slurm_partition="g1", slurm_extra="--reservation=prj-veo"
@@ -32,9 +31,9 @@ rule comebin_sample:
 
 # Prefix sample bin filenames.
 rule comebin_sample_rename_bins:
-    input: "data/binning/comebin/sample/{sample}/status.tsv"
-    output: "data/binning/comebin/sample/{sample}/bins_renamed.done"
-    params: bins="data/binning/comebin/sample/{sample}/comebin_res/comebin_res_bins"
+    input: "data/comebin/sample/{sample}/status.tsv"
+    output: "data/comebin/sample/{sample}/bins_renamed.done"
+    params: bins="data/comebin/sample/{sample}/comebin_res/comebin_res_bins"
     shell:
         r"""
         shopt -s nullglob
@@ -54,10 +53,9 @@ rule semibin2_multisample:
         contigs="data/assembly/multisample/{biome}/{biome}.contigs.fa",
         bams=lambda wc: [f"data/contig_mapping/multisample/{wc.biome}/{s}.sorted.bam" for s in SAMPLES_BY_BIOME[wc.biome]],
         bais=lambda wc: [f"data/contig_mapping/multisample/{wc.biome}/{s}.sorted.bam.bai" for s in SAMPLES_BY_BIOME[wc.biome]]
-    output:
-        status="data/binning/semibin2/multisample/{biome}/status.tsv"
+    output: status="data/semibin2/multisample/{biome}/status.tsv"
     params:
-        outdir="data/binning/semibin2/multisample/{biome}",
+        outdir="data/semibin2/multisample/{biome}",
         samples=lambda wc: SAMPLES_BY_BIOME[wc.biome]
     threads: 64
     resources: mem_mb=900000, runtime=1440, gpu_slot=1, slurm_partition="g1", slurm_extra="--reservation=prj-veo --exclusive"
@@ -77,9 +75,9 @@ rule semibin2_multisample:
 
 # Restore sample prefixes in multisample bins.
 rule semibin2_multisample_restore_headers:
-    input: "data/binning/semibin2/multisample/{biome}/status.tsv"
-    output: "data/binning/semibin2/multisample/{biome}/headers_restored.done"
-    params: bins="data/binning/semibin2/multisample/{biome}/bins"
+    input: "data/semibin2/multisample/{biome}/status.tsv"
+    output: "data/semibin2/multisample/{biome}/headers_restored.done"
+    params: bins="data/semibin2/multisample/{biome}/bins"
     shell:
         r"""
         shopt -s nullglob
@@ -100,8 +98,8 @@ rule vamb_multisample:
         bams=lambda wc: [f"data/contig_mapping/multisample/{wc.biome}/{s}.sorted.bam" for s in SAMPLES_BY_BIOME[wc.biome]],
         bais=lambda wc: [f"data/contig_mapping/multisample/{wc.biome}/{s}.sorted.bam.bai" for s in SAMPLES_BY_BIOME[wc.biome]]
     output:
-        status="data/binning/vamb/multisample/{biome}/status.tsv",
-        results=directory("data/binning/vamb/multisample/{biome}/run")
+        status="data/vamb/multisample/{biome}/status.tsv",
+        results=directory("data/vamb/multisample/{biome}/run")
     params:
         bamdir="data/contig_mapping/multisample/{biome}",
         samples=lambda wc: SAMPLES_BY_BIOME[wc.biome]
@@ -123,8 +121,8 @@ rule vamb_multisample:
 
 # Prefix VAMB bin filenames with sample and tool.
 rule vamb_multisample_rename_bins:
-    input: "data/binning/vamb/multisample/{biome}/run"
-    output: "data/binning/vamb/multisample/{biome}/bins_renamed.done"
+    input: "data/vamb/multisample/{biome}/run"
+    output: "data/vamb/multisample/{biome}/bins_renamed.done"
     shell:
         r"""
         shopt -s nullglob
@@ -142,10 +140,9 @@ rule semibin2_coassembly:
         contigs="data/assembly/coassembly/{biome}/{biome}.contigs.fa",
         bams=lambda wc: [f"data/contig_mapping/coassembly/{wc.biome}/{s}.sorted.bam" for s in SAMPLES_BY_BIOME[wc.biome]],
         bais=lambda wc: [f"data/contig_mapping/coassembly/{wc.biome}/{s}.sorted.bam.bai" for s in SAMPLES_BY_BIOME[wc.biome]]
-    output:
-        bins=directory("data/binning/semibin2/coassembly/{biome}/output_bins")
+    output: bins=directory("data/semibin2/coassembly/{biome}/output_bins")
     params:
-        outdir="data/binning/semibin2/coassembly/{biome}",
+        outdir="data/semibin2/coassembly/{biome}",
         seed=42
     threads: 60
     resources: mem_mb=900000, runtime=1440, gpu_slot=1, slurm_partition="g1", slurm_extra="--reservation=prj-veo --exclusive"
@@ -159,8 +156,8 @@ rule semibin2_coassembly:
 
 # Restore biome prefixes in coassembly headers and bin filenames.
 rule semibin2_coassembly_restore_headers:
-    input: "data/binning/semibin2/coassembly/{biome}/output_bins"
-    output: "data/binning/semibin2/coassembly/{biome}/headers_restored.done"
+    input: "data/semibin2/coassembly/{biome}/output_bins"
+    output: "data/semibin2/coassembly/{biome}/headers_restored.done"
     shell:
         r"""
         shopt -s nullglob
@@ -181,11 +178,11 @@ rule comebin_coassembly:
         bams=lambda wc: [f"data/contig_mapping/coassembly/{wc.biome}/{s}.sorted.bam" for s in SAMPLES_BY_BIOME[wc.biome]],
         bais=lambda wc: [f"data/contig_mapping/coassembly/{wc.biome}/{s}.sorted.bam.bai" for s in SAMPLES_BY_BIOME[wc.biome]]
     output:
-        assignments="data/binning/comebin/coassembly/{biome}/comebin_res/comebin_res.tsv",
-        bins=directory("data/binning/comebin/coassembly/{biome}/comebin_res/comebin_res_bins")
+        assignments="data/comebin/coassembly/{biome}/comebin_res/comebin_res.tsv",
+        bins=directory("data/comebin/coassembly/{biome}/comebin_res/comebin_res_bins")
     params:
         bamdir="data/contig_mapping/coassembly/{biome}",
-        outdir="data/binning/comebin/coassembly/{biome}",
+        outdir="data/comebin/coassembly/{biome}",
         seed=42
     threads: 48
     resources:
@@ -212,8 +209,8 @@ rule comebin_coassembly:
 
 # Prefix coassembly bin filenames.
 rule comebin_coassembly_rename_bins:
-    input: "data/binning/comebin/coassembly/{biome}/comebin_res/comebin_res_bins"
-    output: "data/binning/comebin/coassembly/{biome}/bins_renamed.done"
+    input: "data/comebin/coassembly/{biome}/comebin_res/comebin_res_bins"
+    output: "data/comebin/coassembly/{biome}/bins_renamed.done"
     shell:
         r"""
         shopt -s nullglob

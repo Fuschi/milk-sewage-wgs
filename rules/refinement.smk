@@ -1,8 +1,8 @@
 # COMEBin: sample assignments.
 rule dastool_comebin_sample_input:
-    input: "data/binning/comebin/sample/{sample}/bins_renamed.done"
-    output: "data/refinement/dastool/sample/{sample}/inputs/comebin.tsv"
-    params: bins="data/binning/comebin/sample/{sample}/comebin_res/comebin_res_bins"
+    input: "data/comebin/sample/{sample}/bins_renamed.done"
+    output: "data/dastool/sample/{sample}/inputs/comebin.tsv"
+    params: bins="data/comebin/sample/{sample}/comebin_res/comebin_res_bins"
     container: config["containers"]["dastool"]
     shell:
         """
@@ -16,14 +16,14 @@ rule dastool_comebin_sample_input:
 # SemiBin2 and VAMB: sample assignments from pooled bins.
 rule dastool_multisample_inputs:
     input:
-        semibin2=lambda wc: f"data/binning/semibin2/multisample/{BIOME_BY_SAMPLE[wc.sample]}/headers_restored.done",
-        vamb=lambda wc: f"data/binning/vamb/multisample/{BIOME_BY_SAMPLE[wc.sample]}/bins_renamed.done"
+        semibin2=lambda wc: f"data/semibin2/multisample/{BIOME_BY_SAMPLE[wc.sample]}/headers_restored.done",
+        vamb=lambda wc: f"data/vamb/multisample/{BIOME_BY_SAMPLE[wc.sample]}/bins_renamed.done"
     output:
-        semibin2="data/refinement/dastool/sample/{sample}/inputs/semibin2.tsv",
-        vamb="data/refinement/dastool/sample/{sample}/inputs/vamb.tsv"
+        semibin2="data/dastool/sample/{sample}/inputs/semibin2.tsv",
+        vamb="data/dastool/sample/{sample}/inputs/vamb.tsv"
     params:
-        semibin2=lambda wc: f"data/binning/semibin2/multisample/{BIOME_BY_SAMPLE[wc.sample]}/bins",
-        vamb=lambda wc: f"data/binning/vamb/multisample/{BIOME_BY_SAMPLE[wc.sample]}/run/bins"
+        semibin2=lambda wc: f"data/semibin2/multisample/{BIOME_BY_SAMPLE[wc.sample]}/bins",
+        vamb=lambda wc: f"data/vamb/multisample/{BIOME_BY_SAMPLE[wc.sample]}/run/bins"
     container: config["containers"]["dastool"]
     shell:
         """
@@ -34,14 +34,14 @@ rule dastool_multisample_inputs:
 # COMEBin and SemiBin2: coassembly assignments.
 rule dastool_coassembly_inputs:
     input:
-        comebin="data/binning/comebin/coassembly/{biome}/bins_renamed.done",
-        semibin2="data/binning/semibin2/coassembly/{biome}/headers_restored.done"
+        comebin="data/comebin/coassembly/{biome}/bins_renamed.done",
+        semibin2="data/semibin2/coassembly/{biome}/headers_restored.done"
     output:
-        comebin="data/refinement/dastool/coassembly/{biome}/inputs/comebin.tsv",
-        semibin2="data/refinement/dastool/coassembly/{biome}/inputs/semibin2.tsv"
+        comebin="data/dastool/coassembly/{biome}/inputs/comebin.tsv",
+        semibin2="data/dastool/coassembly/{biome}/inputs/semibin2.tsv"
     params:
-        comebin="data/binning/comebin/coassembly/{biome}/comebin_res/comebin_res_bins",
-        semibin2="data/binning/semibin2/coassembly/{biome}/output_bins"
+        comebin="data/comebin/coassembly/{biome}/comebin_res/comebin_res_bins",
+        semibin2="data/semibin2/coassembly/{biome}/output_bins"
     container: config["containers"]["dastool"]
     shell:
         """
@@ -54,15 +54,15 @@ rule dastool_coassembly_inputs:
 rule dastool_sample:
     input:
         contigs="data/assembly/sample/{sample}/{sample}.contigs.fa",
-        comebin="data/refinement/dastool/sample/{sample}/inputs/comebin.tsv",
-        semibin2="data/refinement/dastool/sample/{sample}/inputs/semibin2.tsv",
-        vamb="data/refinement/dastool/sample/{sample}/inputs/vamb.tsv"
+        comebin="data/dastool/sample/{sample}/inputs/comebin.tsv",
+        semibin2="data/dastool/sample/{sample}/inputs/semibin2.tsv",
+        vamb="data/dastool/sample/{sample}/inputs/vamb.tsv"
     output:
-        summary="data/refinement/dastool/sample/{sample}/{sample}_DASTool_summary.tsv",
-        assignments="data/refinement/dastool/sample/{sample}/{sample}_DASTool_contig2bin.tsv",
-        bins=directory("data/refinement/dastool/sample/{sample}/{sample}_DASTool_bins"),
-        status="data/refinement/dastool/sample/{sample}/status.tsv"
-    params: prefix="data/refinement/dastool/sample/{sample}/{sample}"
+        summary="data/dastool/sample/{sample}/{sample}_DASTool_summary.tsv",
+        assignments="data/dastool/sample/{sample}/{sample}_DASTool_contig2bin.tsv",
+        bins=directory("data/dastool/sample/{sample}/{sample}_DASTool_bins"),
+        status="data/dastool/sample/{sample}/status.tsv"
+    params: prefix="data/dastool/sample/{sample}/{sample}"
     threads: 16
     resources: mem_mb=32000, runtime=240
     container: config["containers"]["dastool"]
@@ -92,13 +92,13 @@ rule dastool_sample:
 rule dastool_coassembly:
     input:
         contigs="data/assembly/coassembly/{biome}/{biome}.contigs.fa",
-        comebin="data/refinement/dastool/coassembly/{biome}/inputs/comebin.tsv",
-        semibin2="data/refinement/dastool/coassembly/{biome}/inputs/semibin2.tsv"
+        comebin="data/dastool/coassembly/{biome}/inputs/comebin.tsv",
+        semibin2="data/dastool/coassembly/{biome}/inputs/semibin2.tsv"
     output:
-        summary="data/refinement/dastool/coassembly/{biome}/{biome}_DASTool_summary.tsv",
-        assignments="data/refinement/dastool/coassembly/{biome}/{biome}_DASTool_contig2bin.tsv",
-        bins=directory("data/refinement/dastool/coassembly/{biome}/{biome}_DASTool_bins")
-    params: prefix="data/refinement/dastool/coassembly/{biome}/{biome}"
+        summary="data/dastool/coassembly/{biome}/{biome}_DASTool_summary.tsv",
+        assignments="data/dastool/coassembly/{biome}/{biome}_DASTool_contig2bin.tsv",
+        bins=directory("data/dastool/coassembly/{biome}/{biome}_DASTool_bins")
+    params: prefix="data/dastool/coassembly/{biome}/{biome}"
     threads: 32
     resources: mem_mb=128000, runtime=1440
     container: config["containers"]["dastool"]

@@ -3,12 +3,9 @@ COVERM_METHODS = "mean trimmed_mean covered_fraction covered_bases variance leng
 
 # Concatenate individual assemblies by biome for multi-sample binning.
 rule multisample_fasta:
-    input:
-        lambda wc: expand("data/assembly/sample/{sample}/{sample}.contigs.fa", sample=SAMPLES_BY_BIOME[wc.biome])
-    output:
-        "data/assembly/multisample/{biome}/{biome}.contigs.fa"
-    resources:
-        mem_mb=4000, runtime=30
+    input: lambda wc: expand("data/assembly/sample/{sample}/{sample}.contigs.fa", sample=SAMPLES_BY_BIOME[wc.biome])
+    output: "data/assembly/multisample/{biome}/{biome}.contigs.fa"
+    resources: mem_mb=4000, runtime=30
     shell:
         """
         cat {input} > {output}
@@ -16,19 +13,13 @@ rule multisample_fasta:
 
 # Build Strobealign index for each individual assembly.
 rule strobealign_index_sample:
-    input:
-        ref="data/assembly/sample/{sample}/{sample}.contigs.fa"
-    output:
-        "data/assembly/sample/{sample}/{sample}.contigs.fa.r150.sti"
+    input: ref="data/assembly/sample/{sample}/{sample}.contigs.fa"
+    output: "data/assembly/sample/{sample}/{sample}.contigs.fa.r150.sti"
     threads: 8
-    resources:
-        mem_mb=32000, runtime=60, slurm_partition=MATRIX_PARTITIONS
-    container:
-        config["containers"]["strobealign"]
-    log:
-        "logs/contig_mapping/sample/{sample}_index.log"
-    benchmark:
-        "benchmarks/contig_mapping/sample/{sample}_index.tsv"
+    resources: mem_mb=32000, runtime=60, slurm_partition=MATRIX_PARTITIONS
+    container: config["containers"]["strobealign"]
+    log: "logs/contig_mapping/sample/{sample}_index.log"
+    benchmark: "benchmarks/contig_mapping/sample/{sample}_index.tsv"
     shell:
         """
         strobealign --create-index -r 150 -t {threads} {input.ref} > {log} 2>&1
@@ -48,14 +39,10 @@ rule contig_mapping_sample:
         bam="data/contig_mapping/sample/{sample}/{sample}.sorted.bam",
         bai="data/contig_mapping/sample/{sample}/{sample}.sorted.bam.bai"
     threads: 16
-    resources:
-        mem_mb=32000, runtime=240, slurm_partition=MATRIX_PARTITIONS
-    container:
-        config["containers"]["strobealign"]
-    log:
-        "logs/contig_mapping/sample/{sample}.log"
-    benchmark:
-        "benchmarks/contig_mapping/sample/{sample}.tsv"
+    resources: mem_mb=32000, runtime=240, slurm_partition=MATRIX_PARTITIONS
+    container: config["containers"]["strobealign"]
+    log: "logs/contig_mapping/sample/{sample}.log"
+    benchmark: "benchmarks/contig_mapping/sample/{sample}.tsv"
     shell:
         """
         strobealign --use-index -r 150 -U -t 12 {input.ref} {input.r1} {input.r2} 2> {log} | samtools sort -@ 4 -m 3G -o {output.bam}.pe.bam -
@@ -69,21 +56,14 @@ rule contig_mapping_sample:
 
 # Calculate coverage metrics from the individual assembly BAM.
 rule contig_coverage_sample:
-    input:
-        "data/contig_mapping/sample/{sample}/{sample}.sorted.bam"
-    output:
-        "data/contig_mapping/sample/{sample}/{sample}.coverage.tsv"
-    params:
-        methods=COVERM_METHODS
+    input: "data/contig_mapping/sample/{sample}/{sample}.sorted.bam"
+    output: "data/contig_mapping/sample/{sample}/{sample}.coverage.tsv"
+    params: methods=COVERM_METHODS
     threads: 4
-    resources:
-        mem_mb=8000, runtime=30
-    container:
-        config["containers"]["coverm"]
-    log:
-        "logs/contig_mapping/sample/{sample}_coverage.log"
-    benchmark:
-        "benchmarks/contig_mapping/sample/{sample}_coverage.tsv"
+    resources: mem_mb=8000, runtime=30
+    container: config["containers"]["coverm"]
+    log: "logs/contig_mapping/sample/{sample}_coverage.log"
+    benchmark: "benchmarks/contig_mapping/sample/{sample}_coverage.tsv"
     shell:
         """
         coverm contig --bam-files {input} --methods {params.methods} -t {threads} -o {output} > {log} 2>&1
@@ -92,19 +72,13 @@ rule contig_coverage_sample:
 
 # Build Strobealign index for each biome coassembly.
 rule strobealign_index_coassembly:
-    input:
-        ref="data/assembly/coassembly/{biome}/{biome}.contigs.fa"
-    output:
-        "data/assembly/coassembly/{biome}/{biome}.contigs.fa.r150.sti"
+    input: ref="data/assembly/coassembly/{biome}/{biome}.contigs.fa"
+    output: "data/assembly/coassembly/{biome}/{biome}.contigs.fa.r150.sti"
     threads: 16
-    resources:
-        mem_mb=128000, runtime=120, slurm_partition=MATRIX_PARTITIONS
-    container:
-        config["containers"]["strobealign"]
-    log:
-        "logs/contig_mapping/coassembly/{biome}_index.log"
-    benchmark:
-        "benchmarks/contig_mapping/coassembly/{biome}_index.tsv"
+    resources: mem_mb=128000, runtime=120, slurm_partition=MATRIX_PARTITIONS
+    container: config["containers"]["strobealign"]
+    log: "logs/contig_mapping/coassembly/{biome}_index.log"
+    benchmark: "benchmarks/contig_mapping/coassembly/{biome}_index.tsv"
     shell:
         """
         strobealign --create-index -r 150 -t {threads} {input.ref} > {log} 2>&1
@@ -124,14 +98,10 @@ rule contig_mapping_coassembly:
         bam="data/contig_mapping/coassembly/{biome}/{sample}.sorted.bam",
         bai="data/contig_mapping/coassembly/{biome}/{sample}.sorted.bam.bai"
     threads: 16
-    resources:
-        mem_mb=128000, runtime=360, slurm_partition=MATRIX_PARTITIONS
-    container:
-        config["containers"]["strobealign"]
-    log:
-        "logs/contig_mapping/coassembly/{biome}_{sample}.log"
-    benchmark:
-        "benchmarks/contig_mapping/coassembly/{biome}_{sample}.tsv"
+    resources: mem_mb=128000, runtime=360, slurm_partition=MATRIX_PARTITIONS
+    container: config["containers"]["strobealign"]
+    log: "logs/contig_mapping/coassembly/{biome}_{sample}.log"
+    benchmark: "benchmarks/contig_mapping/coassembly/{biome}_{sample}.tsv"
     shell:
         """
         strobealign --use-index -r 150 -U -t 12 {input.ref} {input.r1} {input.r2} 2> {log} | samtools sort -@ 4 -m 3G -o {output.bam}.pe.bam -
@@ -145,21 +115,14 @@ rule contig_mapping_coassembly:
 
 # Calculate coverage metrics from each coassembly BAM.
 rule contig_coverage_coassembly:
-    input:
-        "data/contig_mapping/coassembly/{biome}/{sample}.sorted.bam"
-    output:
-        "data/contig_mapping/coassembly/{biome}/{sample}.coverage.tsv"
-    params:
-        methods=COVERM_METHODS
+    input: "data/contig_mapping/coassembly/{biome}/{sample}.sorted.bam"
+    output: "data/contig_mapping/coassembly/{biome}/{sample}.coverage.tsv"
+    params: methods=COVERM_METHODS
     threads: 4
-    resources:
-        mem_mb=64000, runtime=120, slurm_partition=MATRIX_PARTITIONS
-    container:
-        config["containers"]["coverm"]
-    log:
-        "logs/contig_mapping/coassembly/{biome}_{sample}_coverage.log"
-    benchmark:
-        "benchmarks/contig_mapping/coassembly/{biome}_{sample}_coverage.tsv"
+    resources: mem_mb=64000, runtime=120, slurm_partition=MATRIX_PARTITIONS
+    container: config["containers"]["coverm"]
+    log: "logs/contig_mapping/coassembly/{biome}_{sample}_coverage.log"
+    benchmark: "benchmarks/contig_mapping/coassembly/{biome}_{sample}_coverage.tsv"
     shell:
         """
         coverm contig --bam-files {input} --methods {params.methods} -t {threads} -o {output} > {log} 2>&1
@@ -168,19 +131,13 @@ rule contig_coverage_coassembly:
 
 # Build Strobealign index for concatenated individual assemblies.
 rule strobealign_index_multisample:
-    input:
-        ref="data/assembly/multisample/{biome}/{biome}.contigs.fa"
-    output:
-        "data/assembly/multisample/{biome}/{biome}.contigs.fa.r150.sti"
+    input: ref="data/assembly/multisample/{biome}/{biome}.contigs.fa"
+    output: "data/assembly/multisample/{biome}/{biome}.contigs.fa.r150.sti"
     threads: 16
-    resources:
-        mem_mb=128000, runtime=180, slurm_partition=MATRIX_PARTITIONS
-    container:
-        config["containers"]["strobealign"]
-    log:
-        "logs/contig_mapping/multisample/{biome}_index.log"
-    benchmark:
-        "benchmarks/contig_mapping/multisample/{biome}_index.tsv"
+    resources: mem_mb=128000, runtime=180, slurm_partition=MATRIX_PARTITIONS
+    container: config["containers"]["strobealign"]
+    log: "logs/contig_mapping/multisample/{biome}_index.log"
+    benchmark: "benchmarks/contig_mapping/multisample/{biome}_index.tsv"
     shell:
         """
         strobealign --create-index -r 150 -t {threads} {input.ref} > {log} 2>&1
@@ -200,14 +157,10 @@ rule contig_mapping_multisample:
         bam="data/contig_mapping/multisample/{biome}/{sample}.sorted.bam",
         bai="data/contig_mapping/multisample/{biome}/{sample}.sorted.bam.bai"
     threads: 16
-    resources:
-        mem_mb=128000, runtime=480, slurm_partition=MATRIX_PARTITIONS
-    container:
-        config["containers"]["strobealign"]
-    log:
-        "logs/contig_mapping/multisample/{biome}_{sample}.log"
-    benchmark:
-        "benchmarks/contig_mapping/multisample/{biome}_{sample}.tsv"
+    resources: mem_mb=128000, runtime=480, slurm_partition=MATRIX_PARTITIONS
+    container: config["containers"]["strobealign"]
+    log: "logs/contig_mapping/multisample/{biome}_{sample}.log"
+    benchmark: "benchmarks/contig_mapping/multisample/{biome}_{sample}.tsv"
     shell:
         """
         strobealign --use-index -r 150 -U -t 12 {input.ref} {input.r1} {input.r2} 2> {log} | samtools sort -@ 4 -m 3G -o {output.bam}.pe.bam -
@@ -221,21 +174,14 @@ rule contig_mapping_multisample:
 
 # Calculate coverage metrics from each multi-sample BAM.
 rule contig_coverage_multisample:
-    input:
-        "data/contig_mapping/multisample/{biome}/{sample}.sorted.bam"
-    output:
-        "data/contig_mapping/multisample/{biome}/{sample}.coverage.tsv"
-    params:
-        methods=COVERM_METHODS
+    input: "data/contig_mapping/multisample/{biome}/{sample}.sorted.bam"
+    output: "data/contig_mapping/multisample/{biome}/{sample}.coverage.tsv"
+    params: methods=COVERM_METHODS
     threads: 4
-    resources:
-        mem_mb=128000, runtime=180, slurm_partition=MATRIX_PARTITIONS
-    container:
-        config["containers"]["coverm"]
-    log:
-        "logs/contig_mapping/multisample/{biome}_{sample}_coverage.log"
-    benchmark:
-        "benchmarks/contig_mapping/multisample/{biome}_{sample}_coverage.tsv"
+    resources: mem_mb=128000, runtime=180, slurm_partition=MATRIX_PARTITIONS
+    container: config["containers"]["coverm"]
+    log: "logs/contig_mapping/multisample/{biome}_{sample}_coverage.log"
+    benchmark: "benchmarks/contig_mapping/multisample/{biome}_{sample}_coverage.tsv"
     shell:
         """
         coverm contig --bam-files {input} --methods {params.methods} -t {threads} -o {output} > {log} 2>&1

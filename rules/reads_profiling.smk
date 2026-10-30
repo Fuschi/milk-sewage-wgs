@@ -6,11 +6,11 @@ rule profile_amr_reads:
         s2="data/kneaddata/{sample}/{sample}_kneaddata_unmatched_2.fastq.gz",
         db=expand(config["references"]["resfinder_kma"] + ".{suffix}", suffix=["comp.b", "length.b", "name", "seq.b"])
     output:
-        res="data/reads_profiling/amr/resfinder/{sample}/{sample}.res",
-        mapstat="data/reads_profiling/amr/resfinder/{sample}/{sample}.mapstat"
+        res="data/resfinder_reads/{sample}/{sample}.res",
+        mapstat="data/resfinder_reads/{sample}/{sample}.mapstat"
     params:
         db=config["references"]["resfinder_kma"],
-        prefix="data/reads_profiling/amr/resfinder/{sample}/{sample}"
+        prefix="data/resfinder_reads/{sample}/{sample}"
     threads: 8
     resources:
         mem_mb=8000,
@@ -33,11 +33,11 @@ rule profile_virulence_reads:
         s2="data/kneaddata/{sample}/{sample}_kneaddata_unmatched_2.fastq.gz",
         db=expand(config["references"]["vfdb_kma"] + ".{suffix}", suffix=["comp.b", "length.b", "name", "seq.b"])
     output:
-        res="data/reads_profiling/virulence/vfdb/{sample}/{sample}.res",
-        mapstat="data/reads_profiling/virulence/vfdb/{sample}/{sample}.mapstat"
+        res="data/vfdb_reads/{sample}/{sample}.res",
+        mapstat="data/vfdb_reads/{sample}/{sample}.mapstat"
     params:
         db=config["references"]["vfdb_kma"],
-        prefix="data/reads_profiling/virulence/vfdb/{sample}/{sample}"
+        prefix="data/vfdb_reads/{sample}/{sample}"
     threads: 8
     resources:
         mem_mb=8000,
@@ -54,14 +54,14 @@ rule profile_virulence_reads:
 
 rule quantify_amr_reads:
     input:
-        res="data/reads_profiling/amr/resfinder/{sample}/{sample}.res",
-        mapstat="data/reads_profiling/amr/resfinder/{sample}/{sample}.mapstat",
+        res="data/resfinder_reads/{sample}/{sample}.res",
+        mapstat="data/resfinder_reads/{sample}/{sample}.mapstat",
         script="scripts/quantify_kma_reads.sh"
     output:
-        all_refs="data/reads_profiling/amr/resfinder/{sample}/{sample}.quantification.all.tsv",
-        filtered="data/reads_profiling/amr/resfinder/{sample}/{sample}.quantification.filtered.tsv"
+        all_refs="data/resfinder_reads/{sample}/{sample}.quantification.all.tsv",
+        filtered="data/resfinder_reads/{sample}/{sample}.quantification.filtered.tsv"
     params:
-        prefix="data/reads_profiling/amr/resfinder/{sample}/{sample}.quantification",
+        prefix="data/resfinder_reads/{sample}/{sample}.quantification",
         min_identity=90,
         min_coverage=60
     threads: 1
@@ -79,14 +79,14 @@ rule quantify_amr_reads:
 
 rule quantify_virulence_reads:
     input:
-        res="data/reads_profiling/virulence/vfdb/{sample}/{sample}.res",
-        mapstat="data/reads_profiling/virulence/vfdb/{sample}/{sample}.mapstat",
+        res="data/vfdb_reads/{sample}/{sample}.res",
+        mapstat="data/vfdb_reads/{sample}/{sample}.mapstat",
         script="scripts/quantify_kma_reads.sh"
     output:
-        all_refs="data/reads_profiling/virulence/vfdb/{sample}/{sample}.quantification.all.tsv",
-        filtered="data/reads_profiling/virulence/vfdb/{sample}/{sample}.quantification.filtered.tsv"
+        all_refs="data/vfdb_reads/{sample}/{sample}.quantification.all.tsv",
+        filtered="data/vfdb_reads/{sample}/{sample}.quantification.filtered.tsv"
     params:
-        prefix="data/reads_profiling/virulence/vfdb/{sample}/{sample}.quantification",
+        prefix="data/vfdb_reads/{sample}/{sample}.quantification",
         min_identity=90,
         min_coverage=60
     threads: 1
@@ -104,11 +104,11 @@ rule quantify_virulence_reads:
 # Aggregate ResFinder quantifications and annotations.
 rule resfinder_summary:
     input:
-        quantifications=expand("data/reads_profiling/amr/resfinder/{sample}/{sample}.quantification.filtered.tsv", sample=SAMPLES),
+        quantifications=expand("data/resfinder_reads/{sample}/{sample}.quantification.filtered.tsv", sample=SAMPLES),
         phenotypes="/archive/extra/daniel.remondini2/bioinf_db/databases/resfinder/2.6.0/resfinder_db/phenotypes.txt"
     output:
-        abundance="tables/reads_profiling/resfinder_abundance.tsv",
-        metadata="tables/reads_profiling/resfinder_metadata.tsv"
+        abundance="results/resfinder_abundance.tsv",
+        metadata="results/resfinder_metadata.tsv"
     resources: mem_mb=4000, runtime=30
     container: config["containers"]["r"]
     script: "../scripts/aggregate_resfinder.R"
@@ -116,12 +116,12 @@ rule resfinder_summary:
 # Aggregate VFDB quantifications and annotations.
 rule vfdb_summary:
     input:
-        quantifications=expand("data/reads_profiling/virulence/vfdb/{sample}/{sample}.quantification.filtered.tsv", sample=SAMPLES),
+        quantifications=expand("data/vfdb_reads/{sample}/{sample}.quantification.filtered.tsv", sample=SAMPLES),
         fasta="/archive/extra/daniel.remondini2/bioinf_db/databases/vfdb/2026-10-26/VFDB_setA_nt.fas",
         annotations="/archive/extra/daniel.remondini2/bioinf_db/databases/vfdb/2026-10-26/VFs.xls"
     output:
-        abundance="tables/reads_profiling/vfdb_abundance.tsv",
-        metadata="tables/reads_profiling/vfdb_metadata.tsv"
+        abundance="results/vfdb_abundance.tsv",
+        metadata="results/vfdb_metadata.tsv"
     resources: mem_mb=8000, runtime=30
     container: config["containers"]["r"]
     script: "../scripts/aggregate_vfdb.R"

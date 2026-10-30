@@ -1,20 +1,16 @@
 # Dereplicate selected bins and choose representative genomes.
 rule drep:
     input:
-        genomes="data/dereplication/inputs/genomes.txt",
-        genome_info="data/dereplication/inputs/genome_info.csv"
-    output:
-        directory("data/dereplication/drep")
+        genomes="data/drep_inputs/genomes.txt",
+        genome_info="data/drep_inputs/genome_info.csv"
+    output: directory("data/drep")
     threads: 32
     resources:
         mem_mb=128000,
         runtime=1440
-    container:
-        config["containers"]["drep"]
-    log:
-        "logs/dereplication/drep.log"
-    benchmark:
-        "benchmarks/dereplication/drep.tsv"
+    container: config["containers"]["drep"]
+    log: "logs/dereplication/drep.log"
+    benchmark: "benchmarks/dereplication/drep.tsv"
     shell:
         """
         dRep dereplicate {output} \

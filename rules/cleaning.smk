@@ -19,12 +19,9 @@ rule kneaddata_clean:
     resources:
         mem_mb=16000,
         runtime=360
-    container:
-        config["containers"]["kneaddata"]
-    log:
-        "logs/kneaddata/{sample}.log"
-    benchmark:
-        "benchmarks/kneaddata/{sample}.tsv"
+    container: config["containers"]["kneaddata"]
+    log: "logs/kneaddata/{sample}.log"
+    benchmark: "benchmarks/kneaddata/{sample}.tsv"
     shell:
         """
         kneaddata \
@@ -71,8 +68,7 @@ rule compress_kneaddata_reads:
     resources:
         mem_mb=4000,
         runtime=60
-    benchmark:
-        "benchmarks/kneaddata/compress_{sample}.tsv"
+    benchmark: "benchmarks/kneaddata/compress_{sample}.tsv"
     shell:
         """
         pigz -p {threads} -c {input.r1} > {output.r1}
@@ -93,15 +89,12 @@ rule kneaddata_read_counts:
         sing1=expand("data/kneaddata/{sample}/{sample}_kneaddata_unmatched_1.fastq.gz", sample=SAMPLES),
         sing2=expand("data/kneaddata/{sample}/{sample}_kneaddata_unmatched_2.fastq.gz", sample=SAMPLES),
         logs=expand("logs/kneaddata/{sample}.log", sample=SAMPLES)
-    output:
-        "tables/kneaddata_read_counts.tsv"
+    output: "results/kneaddata_read_counts.tsv"
     resources:
         mem_mb=2000,
         runtime=10
-    container:
-        config["containers"]["kneaddata"]
-    benchmark:
-        "benchmarks/kneaddata/read_counts.tsv"
+    container: config["containers"]["kneaddata"]
+    benchmark: "benchmarks/kneaddata/read_counts.tsv"
     shell:
         """
         kneaddata_read_count_table --input logs/kneaddata --output {output}

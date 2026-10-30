@@ -6,8 +6,7 @@ rule sample_assembly:
         r2="data/kneaddata/{sample}/{sample}_kneaddata_paired_2.fastq.gz",
         sing1="data/kneaddata/{sample}/{sample}_kneaddata_unmatched_1.fastq.gz",
         sing2="data/kneaddata/{sample}/{sample}_kneaddata_unmatched_2.fastq.gz"
-    output:
-        protected("data/assembly/sample/{sample}/{sample}.contigs.fa")
+    output: protected("data/assembly/sample/{sample}/{sample}.contigs.fa")
     params:
         outdir="data/assembly/sample/{sample}",
         prefix="{sample}",
@@ -17,12 +16,9 @@ rule sample_assembly:
         mem_mb=32000,
         runtime=480,
         slurm_partition="m1,m2,m3,m4,m5,m6,m7"
-    container:
-        config["containers"]["megahit"]
-    log:
-        "logs/assembly/sample/{sample}.log"
-    benchmark:
-        "benchmarks/assembly/sample/{sample}.tsv"
+    container: config["containers"]["megahit"]
+    log: "logs/assembly/sample/{sample}.log"
+    benchmark: "benchmarks/assembly/sample/{sample}.tsv"
     shell:
         """
         rm -rf {params.outdir}
@@ -39,8 +35,7 @@ rule coassembly:
         r2=lambda wc: expand("data/kneaddata/{sample}/{sample}_kneaddata_paired_2.fastq.gz", sample=SAMPLES_BY_BIOME[wc.biome]),
         sing1=lambda wc: expand("data/kneaddata/{sample}/{sample}_kneaddata_unmatched_1.fastq.gz", sample=SAMPLES_BY_BIOME[wc.biome]),
         sing2=lambda wc: expand("data/kneaddata/{sample}/{sample}_kneaddata_unmatched_2.fastq.gz", sample=SAMPLES_BY_BIOME[wc.biome])
-    output:
-        protected("data/assembly/coassembly/{biome}/{biome}.contigs.fa")
+    output: protected("data/assembly/coassembly/{biome}/{biome}.contigs.fa")
     params:
         r1=lambda wc, input: ",".join(input.r1),
         r2=lambda wc, input: ",".join(input.r2),
@@ -54,12 +49,9 @@ rule coassembly:
         runtime=1400,
         slurm_partition="m8",
         slurm_extra="--reservation=prj-trigger --nodelist=mtx30"
-    container:
-        config["containers"]["megahit"]
-    log:
-        "logs/assembly/coassembly/{biome}.log"
-    benchmark:
-        "benchmarks/assembly/coassembly/{biome}.tsv"
+    container: config["containers"]["megahit"]
+    log: "logs/assembly/coassembly/{biome}.log"
+    benchmark: "benchmarks/assembly/coassembly/{biome}.tsv"
     shell:
         """
         if [ -f {params.outdir}/options.json ] && [ -f {params.outdir}/checkpoints.txt ]; then
@@ -76,22 +68,16 @@ rule coassembly:
 
 # Assess sample assemblies with MetaQUAST using no-reference settings.
 rule sample_contig_qc:
-    input:
-        "data/assembly/sample/{sample}/{sample}.contigs.fa"
-    output:
-        "data/assembly/metaquast/sample/{sample}/report.tsv"
-    params:
-        outdir="data/assembly/metaquast/sample/{sample}"
+    input: "data/assembly/sample/{sample}/{sample}.contigs.fa"
+    output: "data/metaquast/sample/{sample}/report.tsv"
+    params: outdir="data/metaquast/sample/{sample}"
     threads: 8
     resources:
         mem_mb=16000,
         runtime=120
-    container:
-        config["containers"]["quast"]
-    log:
-        "logs/assembly/sample/{sample}_metaquast.log"
-    benchmark:
-        "benchmarks/assembly/sample/{sample}_metaquast.tsv"
+    container: config["containers"]["quast"]
+    log: "logs/assembly/sample/{sample}_metaquast.log"
+    benchmark: "benchmarks/assembly/sample/{sample}_metaquast.tsv"
     shell:
         """
         metaquast.py {input} -o {params.outdir} -t {threads} \
@@ -101,22 +87,16 @@ rule sample_contig_qc:
 
 # Assess biome coassemblies with the same no-reference MetaQUAST settings.
 rule coassembly_contig_qc:
-    input:
-        "data/assembly/coassembly/{biome}/{biome}.contigs.fa"
-    output:
-        "data/assembly/metaquast/coassembly/{biome}/report.tsv"
-    params:
-        outdir="data/assembly/metaquast/coassembly/{biome}"
+    input: "data/assembly/coassembly/{biome}/{biome}.contigs.fa"
+    output: "data/metaquast/coassembly/{biome}/report.tsv"
+    params: outdir="data/metaquast/coassembly/{biome}"
     threads: 16
     resources:
         mem_mb=32000,
         runtime=240
-    container:
-        config["containers"]["quast"]
-    log:
-        "logs/assembly/coassembly/{biome}_metaquast.log"
-    benchmark:
-        "benchmarks/assembly/coassembly/{biome}_metaquast.tsv"
+    container: config["containers"]["quast"]
+    log: "logs/assembly/coassembly/{biome}_metaquast.log"
+    benchmark: "benchmarks/assembly/coassembly/{biome}_metaquast.tsv"
     shell:
         """
         metaquast.py {input} -o {params.outdir} -t {threads} \
@@ -126,12 +106,9 @@ rule coassembly_contig_qc:
 # Aggregate assembly QC.
 rule metaquast_summary:
     input:
-        sample_reports=expand("data/assembly/metaquast/sample/{sample}/report.tsv", sample=SAMPLES),
-        coassembly_reports=expand("data/assembly/metaquast/coassembly/{biome}/report.tsv", biome=BIOMES),
+        sample_reports=expand("data/metaquast/sample/{sample}/report.tsv", sample=SAMPLES),
+        coassembly_reports=expand("data/metaquast/coassembly/{biome}/report.tsv", biome=BIOMES),
         metadata=config["samples"]
-    output:
-        summary="tables/metaquast_summary.tsv"
-    container:
-        config["containers"]["r"]
-    script:
-        "../scripts/aggregate_metaquast.R"
+    output: summary="results/metaquast_summary.tsv"
+    container: config["containers"]["r"]
+    script: "../scripts/aggregate_metaquast.R"

@@ -1,24 +1,19 @@
 # Classify dereplicated MAGs with GTDB-Tk.
 rule gtdbtk:
     input:
-        drep="data/dereplication/drep",
+        drep="data/drep",
         db=config["references"]["gtdbtk"]
-    output:
-        directory("data/taxonomy/gtdbtk")
-    params:
-        genomes="data/dereplication/drep/dereplicated_genomes"
+    output: directory("data/gtdbtk")
+    params: genomes="data/drep/dereplicated_genomes"
     threads: 64
     resources:
         mem_mb=1000000,
         runtime=1440,
         slurm_partition="m8",
         slurm_extra="--nodelist=mtx30 --reservation=prj-trigger"
-    container:
-        config["containers"]["gtdbtk"]
-    log:
-        "logs/taxonomy/gtdbtk.log"
-    benchmark:
-        "benchmarks/taxonomy/gtdbtk.tsv"
+    container: config["containers"]["gtdbtk"]
+    log: "logs/taxonomy/gtdbtk.log"
+    benchmark: "benchmarks/taxonomy/gtdbtk.tsv"
     shell:
         """
         gtdbtk classify_wf \
@@ -34,16 +29,12 @@ rule gtdbtk:
 
 rule gtdbtk_summary:
     input:
-        ar53="data/taxonomy/gtdbtk/classify/gtdbtk.ar53.summary.tsv",
-        bac120="data/taxonomy/gtdbtk/classify/gtdbtk.bac120.summary.tsv"
-    output:
-        summary="tables/taxonomy/gtdbtk_summary.tsv"
+        ar53="data/gtdbtk/classify/gtdbtk.ar53.summary.tsv",
+        bac120="data/gtdbtk/classify/gtdbtk.bac120.summary.tsv"
+    output: summary="results/gtdbtk_summary.tsv"
     resources:
         mem_mb=4000,
         runtime=30
-    container:
-        config["containers"]["r"]
-    benchmark:
-        "benchmarks/taxonomy/gtdbtk_summary.tsv"
-    script:
-        "../scripts/aggregate_gtdbtk.R"
+    container: config["containers"]["r"]
+    benchmark: "benchmarks/taxonomy/gtdbtk_summary.tsv"
+    script: "../scripts/aggregate_gtdbtk.R"

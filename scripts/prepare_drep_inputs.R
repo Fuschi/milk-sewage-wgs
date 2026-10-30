@@ -7,7 +7,7 @@ min_completeness <- 50
 max_contamination <- 10
 
 # Find DAS Tool bin FASTA files
-bin_files <- list.files("data/refinement/dastool", pattern = "\\.fa$",
+bin_files <- list.files("data/dastool", pattern = "\\.fa$",
                         recursive = TRUE, full.names = TRUE)
 
 bins <- tibble(
@@ -23,14 +23,14 @@ bins <- tibble(
 units <- bins |> distinct(mode, unit)
 
 checkm2 <- pmap_dfr(units, function(mode, unit) {
-  read_tsv(file.path("data/bin_quality/checkm2", mode, unit, "quality_report.tsv"),
+  read_tsv(file.path("data/checkm2", mode, unit, "quality_report.tsv"),
            show_col_types = FALSE) |>
     transmute(mode = mode, unit = unit, bin_id = Name,
               completeness = Completeness, contamination = Contamination)
 })
 
 gunc <- pmap_dfr(units, function(mode, unit) {
-  read_tsv(file.path("data/bin_quality/gunc", mode, unit,
+  read_tsv(file.path("data/gunc", mode, unit,
                      "GUNC.progenomes_3.maxCSS_level.tsv"),
            show_col_types = FALSE) |>
     transmute(mode = mode, unit = unit, bin_id = genome,
@@ -56,12 +56,12 @@ summary <- bins |>
 selected <- summary |> filter(selected_for_drep)
 
 # Write the summary and dRep input files
-write_tsv(summary, "tables/bin_quality_summary.tsv", na = "NA")
-write_lines(selected$fasta, "data/dereplication/inputs/genomes.txt")
+write_tsv(summary, "results/bin_quality_summary.tsv", na = "NA")
+write_lines(selected$fasta, "data/drep_inputs/genomes.txt")
 
 selected |>
   transmute(genome = fasta_name, completeness, contamination) |>
-  write_csv("data/dereplication/inputs/genome_info.csv")
+  write_csv("data/drep_inputs/genome_info.csv")
 
 # Print the number of bins in each selection category
 summary |> count(selection_status, name = "n_bins") |> print()

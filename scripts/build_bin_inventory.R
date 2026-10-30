@@ -65,15 +65,15 @@ sample_runs <- samples |>
     mode = if_else(tool == "comebin", "sample", "multisample"),
     directory = case_when(
       tool == "comebin" ~ file.path(
-        root, "data/binning/comebin/sample",
+        root, "data/comebin/sample",
         sample, "comebin_res/comebin_res_bins"
       ),
       tool == "semibin2" ~ file.path(
-        root, "data/binning/semibin2/multisample",
+        root, "data/semibin2/multisample",
         biome, "samples", sample, "output_bins"
       ),
       tool == "vamb" ~ file.path(
-        root, "data/binning/vamb/multisample",
+        root, "data/vamb/multisample",
         biome, "run/bins"
       )
     )
@@ -88,11 +88,11 @@ coassembly_runs <- samples |>
     mode = "coassembly",
     directory = case_when(
       tool == "comebin" ~ file.path(
-        root, "data/binning/comebin/coassembly",
+        root, "data/comebin/coassembly",
         biome, "comebin_res/comebin_res_bins"
       ),
       tool == "semibin2" ~ file.path(
-        root, "data/binning/semibin2/coassembly",
+        root, "data/semibin2/coassembly",
         biome, "output_bins"
       )
     )

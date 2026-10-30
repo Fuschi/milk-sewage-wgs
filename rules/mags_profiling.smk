@@ -2,13 +2,12 @@
 
 rule coverm_mags:
     input:
-        drep="data/dereplication/drep",
+        drep="data/drep",
         r1="data/kneaddata/{sample}/{sample}_kneaddata_paired_1.fastq.gz",
         r2="data/kneaddata/{sample}/{sample}_kneaddata_paired_2.fastq.gz"
-    output:
-        "data/mags_profiling/coverm/{sample}.tsv"
+    output: "data/coverm_mags/{sample}.tsv"
     params:
-        genomes="data/dereplication/drep/dereplicated_genomes",
+        genomes="data/drep/dereplicated_genomes",
         methods=(
             "relative_abundance mean trimmed_mean covered_fraction "
             "covered_bases variance rpkm tpm"
@@ -17,12 +16,9 @@ rule coverm_mags:
     resources:
         mem_mb=32000,
         runtime=720
-    container:
-        config["containers"]["coverm"]
-    log:
-        "logs/mags_profiling/coverm/{sample}.log"
-    benchmark:
-        "benchmarks/mags_profiling/coverm/{sample}.tsv"
+    container: config["containers"]["coverm"]
+    log: "logs/mags_profiling/coverm/{sample}.log"
+    benchmark: "benchmarks/mags_profiling/coverm/{sample}.tsv"
     shell:
         """
         coverm genome \
@@ -36,26 +32,20 @@ rule coverm_mags:
         """
 
 rule abricate_mags:
-    input:
-        drep="data/dereplication/drep"
-    output:
-        "tables/mags_profiling/abricate_{database}.tsv"
+    input: drep="data/drep"
+    output: "results/abricate_{database}.tsv"
     params:
-        genomes="data/dereplication/drep/dereplicated_genomes",
+        genomes="data/drep/dereplicated_genomes",
         min_identity=90,
         min_coverage=60
-    wildcard_constraints:
-        database="resfinder_2.6.0|vfdb_2026-10-26"
+    wildcard_constraints: database="resfinder_2.6.0|vfdb_2026-10-26"
     threads: 8
     resources:
         mem_mb=8000,
         runtime=120
-    container:
-        config["containers"]["abricate"]
-    log:
-        "logs/mags_profiling/abricate/{database}.log"
-    benchmark:
-        "benchmarks/mags_profiling/abricate/{database}.tsv"
+    container: config["containers"]["abricate"]
+    log: "logs/mags_profiling/abricate/{database}.log"
+    benchmark: "benchmarks/mags_profiling/abricate/{database}.tsv"
     shell:
         """
         abricate \
@@ -73,19 +63,14 @@ rule abricate_mags:
 rule coverm_mags_summary:
     input:
         coverm=expand(
-            "data/mags_profiling/coverm/{sample}.tsv",
+            "data/coverm_mags/{sample}.tsv",
             sample=SAMPLES
         )
-    output:
-        summary="tables/mags_profiling/mags_abundance.tsv"
+    output: summary="results/mags_abundance.tsv"
     resources:
         mem_mb=4000,
         runtime=30
-    container:
-        config["containers"]["r"]
-    log:
-        "logs/mags_profiling/coverm_summary.log"
-    benchmark:
-        "benchmarks/mags_profiling/coverm_summary.tsv"
-    script:
-        "../scripts/aggregate_coverm_mags.R"
+    container: config["containers"]["r"]
+    log: "logs/mags_profiling/coverm_summary.log"
+    benchmark: "benchmarks/mags_profiling/coverm_summary.tsv"
+    script: "../scripts/aggregate_coverm_mags.R"

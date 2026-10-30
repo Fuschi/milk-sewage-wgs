@@ -7,6 +7,7 @@ references:
   vfdb_kma: /archive/extra/daniel.remondini2/bioinf_db/databases/vfdb/2026-10-26/vfdb_setA
   checkm2: /archive/extra/daniel.remondini2/bioinf_db/databases/checkm2/1.1.0/CheckM2_database/uniref100.KO.1.dmnd
   gunc: /archive/extra/daniel.remondini2/bioinf_db/databases/gunc/progenomes_3/gunc_db_progenomes3.dmnd
+  gtdbtk: /archive/extra/daniel.remondini2/bioinf_db/databases/gtdb_r232/gtdbtk_r232.squashfs
 
 containers:
   kneaddata: /archive/extra/daniel.remondini2/bioinf_db/containers/kneaddata/0.12.4/kneaddata_0.12.4.sif
@@ -23,4 +24,6 @@ containers:
   kma: /archive/extra/daniel.remondini2/bioinf_db/containers/kma/1.6.13/kma_1.6.13.sif
   checkm2: /archive/extra/daniel.remondini2/bioinf_db/containers/checkm2/1.1.0/checkm2_1.1.0.sif
   gunc: /archive/extra/daniel.remondini2/bioinf_db/containers/gunc/1.1.1/gunc_1.1.1.sif
-
+  drep: /archive/extra/daniel.remondini2/bioinf_db/containers/drep/4.0.3/drep_4.0.3.sif
+  gtdbtk: /archive/extra/daniel.remondini2/bioinf_db/containers/gtdbtk/2.8.0/gtdbtk_2.8.0.sif
+  abricate: /archive/extra/daniel.remondini2/bioinf_db/containers/abricate/1.4.0/abricate_1.4.0_custom.sif

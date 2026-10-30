@@ -104,6 +104,23 @@ rule all:
         expand("data/bin_quality/checkm2/coassembly/{biome}/quality_report.tsv", biome=BIOMES),
         expand("data/bin_quality/gunc/coassembly/{biome}/GUNC.progenomes_3.maxCSS_level.tsv", biome=BIOMES),
 
+        # Bin quality: summaries
+        "tables/bin_quality_summary.tsv",
+        "data/dereplication/inputs/genomes.txt",
+        "data/dereplication/inputs/genome_info.csv",
+
+        # Dereplication: dRep
+        "data/dereplication/drep",
+
+        # MAG taxonomy
+        "data/taxonomy/gtdbtk",
+        "tables/taxonomy/gtdbtk_summary.tsv",
+
+        # MAG profiling
+        expand("data/mags_profiling/coverm/{sample}.tsv", sample=SAMPLES),
+        expand("tables/mags_profiling/abricate_{database}.tsv", database=["resfinder_2.6.0", "vfdb_2026-10-26"]),
+        "tables/mags_profiling/mags_abundance.tsv"
+
 # -----------------------------------------------------------------------------
 
 # Workflow rules
@@ -115,3 +132,6 @@ include: "rules/contig_mapping.smk"
 include: "rules/binning.smk"
 include: "rules/refinement.smk"
 include: "rules/bin_quality.smk"
+include: "rules/dereplication.smk"
+include: "rules/taxonomy_mag.smk"
+include: "rules/mags_profiling.smk"

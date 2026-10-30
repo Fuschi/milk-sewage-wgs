@@ -13,9 +13,11 @@ apptainer-args: >-
   --bind /home/PERSONALE:/home/PERSONALE
   --bind /scratch:/scratch
   --bind /archive:/archive
+  --bind /archive/extra/daniel.remondini2/bioinf_db/databases/gtdb_r232/gtdbtk_r232.squashfs:/gtdb_data:image-src=/
   --cleanenv
   --nv
   --env CHECKM_DATA_PATH=/archive/extra/daniel.remondini2/bioinf_db/databases/checkm1
+  --env GTDBTK_DATA_PATH=/gtdb_data
 
 resources:
   - gpu_slot=1

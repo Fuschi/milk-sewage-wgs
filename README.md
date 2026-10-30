@@ -1,45 +1,33 @@
 # milk-sewage WGS
 
-Snakemake workflow for shotgun metagenomic analysis of milk and sewage samples,
-configured for the OPH SLURM cluster.
-
-The workflow covers read quality control and host removal, metagenome assembly,
-genome binning, refinement and quality assessment, and read-based profiling of
-antimicrobial resistance and virulence genes.
+Snakemake workflow for shotgun metagenomic analysis of milk and sewage samples
+on the OPH Slurm cluster. It covers read processing, assembly, genome binning,
+quality assessment, dereplication, taxonomy, and resistance and virulence
+profiling from reads and MAGs.
 
 ## Configuration
 
-- Input reads: `data/reads_raw/{sample_id}_R1.fastq.gz` and
-  `data/reads_raw/{sample_id}_R2.fastq.gz`.
-- Sample metadata: `config/samples.tsv`.
+- Reads: `data/reads_raw/{sample_id}_R1.fastq.gz` and `{sample_id}_R2.fastq.gz`.
+- Samples: `config/samples.tsv`.
 - References and containers: `config/config.yaml`.
-- Cluster settings: `profiles/slurm/config.yaml`.
+- Cluster profile: `profiles/slurm/config.yaml`.
 
 See [environment setup](docs/conda.md) for installation instructions.
 
 ## Run
 
-Activate the environment and preview the workflow:
-
 ```bash
 conda activate snakemake-slurm
 snakemake --profile profiles/slurm --dry-run
-```
-
-Submit the workflow:
-
-```bash
 ./submit.sh
 ```
 
 ## Outputs
 
-- `data/`: processed reads and intermediate tool outputs (ignored by Git).
-  Named directories identify each tool or stage, such as `data/gtdbtk`,
-  `data/drep`, `data/resfinder_reads`, and `data/coverm_mags`.
-- `results/`: summary tables and metadata ready for downstream analysis.
-- `results/sourmash/`: Sourmash matrices and plots.
-- `logs/`: execution logs (ignored by Git).
+- `data/`: processed reads and intermediate outputs; ignored by Git.
+- `results/`: analysis tables, metadata, and Sourmash results. See
+  [results documentation](results/README.md).
+- `logs/`: execution logs; ignored by Git.
 - `benchmarks/`: runtime and resource usage.
 
 Existing OPH runs require path migration before using this layout.

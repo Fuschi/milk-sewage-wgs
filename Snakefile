@@ -24,7 +24,8 @@ rule all:
         expand("data/resfinder_reads/{sample}/{sample}.mapstat", sample=SAMPLES),
         expand("data/resfinder_reads/{sample}/{sample}.quantification.{table}.tsv", sample=SAMPLES, table=["all", "filtered"]),
         expand("data/vfdb_reads/{sample}/{sample}.quantification.{table}.tsv", sample=SAMPLES, table=["all", "filtered"]),
-        expand("results/{database}_{table}.tsv", database=["resfinder", "vfdb"], table=["abundance", "metadata"]),
+        expand("results/{database}_reads_abundance.tsv", database=["resfinder", "vfdb"]),
+        expand("results/{database}_metadata.tsv", database=["resfinder", "vfdb"]),
 
         # Assembly quality
         expand("data/metaquast/sample/{sample}/report.tsv", sample=SAMPLES),

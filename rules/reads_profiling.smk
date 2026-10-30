@@ -107,7 +107,7 @@ rule resfinder_summary:
         quantifications=expand("data/resfinder_reads/{sample}/{sample}.quantification.filtered.tsv", sample=SAMPLES),
         phenotypes="/archive/extra/daniel.remondini2/bioinf_db/databases/resfinder/2.6.0/resfinder_db/phenotypes.txt"
     output:
-        abundance="results/resfinder_abundance.tsv",
+        abundance="results/resfinder_reads_abundance.tsv",
         metadata="results/resfinder_metadata.tsv"
     resources: mem_mb=4000, runtime=30
     container: config["containers"]["r"]
@@ -120,7 +120,7 @@ rule vfdb_summary:
         fasta="/archive/extra/daniel.remondini2/bioinf_db/databases/vfdb/2026-10-26/VFDB_setA_nt.fas",
         annotations="/archive/extra/daniel.remondini2/bioinf_db/databases/vfdb/2026-10-26/VFs.xls"
     output:
-        abundance="results/vfdb_abundance.tsv",
+        abundance="results/vfdb_reads_abundance.tsv",
         metadata="results/vfdb_metadata.tsv"
     resources: mem_mb=8000, runtime=30
     container: config["containers"]["r"]

@@ -40,6 +40,13 @@ One row per classified dereplicated MAG. `mag_id` identifies the MAG;
 include reference matches, ANI, alignment fractions, classification method,
 marker information and warnings. Unassigned ranks are `NA`.
 
+### `ncbi_taxonomy.tsv`
+
+One row per MAG with GTDB and inferred NCBI classifications. `ncbi_domain`
+through `ncbi_species` contain the separate NCBI ranks; `ncbi_most_specific`
+is the most specific assigned rank. The NCBI lineage is inferred by majority
+vote and may be incomplete. Join to other MAG tables on `mag_id`.
+
 ## MAG abundance and gene screening
 
 ### `mags_abundance.tsv`

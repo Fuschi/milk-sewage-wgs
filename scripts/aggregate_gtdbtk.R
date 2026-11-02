@@ -4,7 +4,11 @@ library(readr)
 library(stringr)
 library(tidyr)
 
-taxonomy_files <- unlist(snakemake@input, use.names = FALSE)
+
+taxonomy_files <- c(
+  snakemake@input[["ar53"]],
+  snakemake@input[["bac120"]]
+)
 output_file <- snakemake@output[["summary"]]
 
 taxonomy <- map_dfr(

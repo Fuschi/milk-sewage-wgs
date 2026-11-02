@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="740" viewBox="0 0 1800 740">
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#64748b"/></marker></defs>
+<rect width="1800" height="740" fill="white"/>
+<style>text{font-family:Arial,sans-serif;fill:#243447} .heading{font-size:15px;fill:#64748b;letter-spacing:1px}.title{font-size:28px;font-weight:bold}.small{font-size:14px}</style>
+<text x="30" y="43" class="title" font-size="17" text-anchor="start">Milk–sewage metagenomics</text>
+<text x="30" y="70" class="" font-size="17" text-anchor="start">Main workflow · individual assemblies, multisample binning and coassembly</text>
+<text x="30" y="111" class="heading" font-size="17" text-anchor="start">01  READ PROCESSING</text>
+<text x="285" y="111" class="heading" font-size="17" text-anchor="start">02  ASSEMBLY</text>
+<text x="585" y="111" class="heading" font-size="17" text-anchor="start">03  BINNING</text>
+<text x="895" y="111" class="heading" font-size="17" text-anchor="start">04  REFINEMENT</text>
+<text x="1150" y="111" class="heading" font-size="17" text-anchor="start">05  MAG CATALOGUE</text>
+<text x="1485" y="111" class="heading" font-size="17" text-anchor="start">06  PROFILING</text>
+<path d="M245,320 L264,320 L264,209 L285,209" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M245,320 L264,320 L264,484 L285,484" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M545,209 L565,209 L565,191 L585,191" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M545,209 L565,209 L565,327 L585,327" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M545,484 L585,484" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M855,191 L875,191 L875,260 L895,260" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M855,327 L875,327 L875,280 L895,280" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M855,484 L895,484" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M1115,270 L1130,270 L1130,345 L1150,345" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M1115,484 L1130,484 L1130,365 L1150,365" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M1435,355 L1460,355 L1460,213 L1485,213" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M1435,355 L1460,355 L1460,350 L1485,350" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M1435,355 L1460,355 L1460,487 L1485,487" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M137,375 L137,602" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M415,264 L415,296" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M415,429 L415,380" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M245,335 L255,335 L255,573 L1775,573 L1775,350 L1745,350" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)" stroke-dasharray="6 5"/>
+<rect x="30" y="265" width="215" height="110" rx="9" fill="#eef4f8" stroke="#a9bdcc" stroke-width="1.5"/>
+<text x="137.5" y="292" class="" font-size="18" text-anchor="middle">KneadData</text>
+<text x="137.5" y="316" class="" font-size="15" text-anchor="middle">Quality filtering</text>
+<text x="137.5" y="337" class="" font-size="15" text-anchor="middle">Bos taurus removal</text>
+<text x="137.5" y="358" class="" font-size="15" text-anchor="middle">Raw reads → clean reads</text>
+<rect x="285" y="154" width="260" height="110" rx="9" fill="#eaf4fb" stroke="#8cb9d7" stroke-width="1.5"/>
+<text x="415.0" y="181" class="" font-size="18" text-anchor="middle">Single-sample assembly</text>
+<text x="415.0" y="205" class="" font-size="15" text-anchor="middle">MEGAHIT</text>
+<text x="415.0" y="226" class="" font-size="15" text-anchor="middle">Paired + unmatched reads</text>
+<rect x="285" y="296" width="260" height="84" rx="9" fill="#f8fafc" stroke="#a9bdcc" stroke-width="1.5"/>
+<text x="415.0" y="323" class="" font-size="18" text-anchor="middle">Assembly QC</text>
+<text x="415.0" y="347" class="" font-size="15" text-anchor="middle">MetaQUAST</text>
+<rect x="285" y="429" width="260" height="110" rx="9" fill="#fff2df" stroke="#d9b477" stroke-width="1.5"/>
+<text x="415.0" y="456" class="" font-size="18" text-anchor="middle">Coassembly by biome</text>
+<text x="415.0" y="480" class="" font-size="15" text-anchor="middle">MEGAHIT</text>
+<text x="415.0" y="501" class="" font-size="15" text-anchor="middle">Milk / sewage separately</text>
+<rect x="585" y="140" width="270" height="102" rx="9" fill="#eaf4fb" stroke="#8cb9d7" stroke-width="1.5"/>
+<text x="720.0" y="167" class="" font-size="18" text-anchor="middle">Single-sample binning</text>
+<text x="720.0" y="191" class="" font-size="15" text-anchor="middle">strobealign mapping</text>
+<text x="720.0" y="212" class="" font-size="15" text-anchor="middle">COMEBin</text>
+<rect x="585" y="267" width="270" height="120" rx="9" fill="#edf7f3" stroke="#91bda9" stroke-width="1.5"/>
+<text x="720.0" y="294" class="" font-size="18" text-anchor="middle">Multisample binning</text>
+<text x="720.0" y="318" class="" font-size="15" text-anchor="middle">Concatenate assemblies by biome</text>
+<text x="720.0" y="339" class="" font-size="15" text-anchor="middle">strobealign mapping</text>
+<text x="720.0" y="360" class="" font-size="15" text-anchor="middle">SemiBin2 + VAMB</text>
+<rect x="585" y="429" width="270" height="110" rx="9" fill="#fff2df" stroke="#d9b477" stroke-width="1.5"/>
+<text x="720.0" y="456" class="" font-size="18" text-anchor="middle">Coassembly binning</text>
+<text x="720.0" y="480" class="" font-size="15" text-anchor="middle">strobealign mapping</text>
+<text x="720.0" y="501" class="" font-size="15" text-anchor="middle">COMEBin + SemiBin2</text>
+<rect x="895" y="217" width="220" height="110" rx="9" fill="#eaf4fb" stroke="#8cb9d7" stroke-width="1.5"/>
+<text x="1005.0" y="244" class="" font-size="18" text-anchor="middle">DAS Tool</text>
+<text x="1005.0" y="268" class="" font-size="15" text-anchor="middle">Combine three binners</text>
+<text x="1005.0" y="289" class="" font-size="15" text-anchor="middle">Refine bins per sample</text>
+<rect x="895" y="429" width="220" height="110" rx="9" fill="#fff2df" stroke="#d9b477" stroke-width="1.5"/>
+<text x="1005.0" y="456" class="" font-size="18" text-anchor="middle">DAS Tool</text>
+<text x="1005.0" y="480" class="" font-size="15" text-anchor="middle">Combine two binners</text>
+<text x="1005.0" y="501" class="" font-size="15" text-anchor="middle">Refine bins per biome</text>
+<rect x="1150" y="274" width="285" height="162" rx="9" fill="#f0edfa" stroke="#b6a6d1" stroke-width="1.5"/>
+<text x="1292.5" y="301" class="" font-size="18" text-anchor="middle">Quality + dereplication</text>
+<text x="1292.5" y="325" class="" font-size="15" text-anchor="middle">CheckM2 + GUNC reports*</text>
+<text x="1292.5" y="346" class="" font-size="15" text-anchor="middle">Completeness ≥50%; contam. &lt;10%</text>
+<text x="1292.5" y="367" class="" font-size="15" text-anchor="middle">dRep · 95% ANI</text>
+<text x="1292.5" y="388" class="" font-size="15" text-anchor="middle">Non-redundant MAG catalogue</text>
+<rect x="1485" y="170" width="260" height="86" rx="9" fill="#f0edfa" stroke="#b6a6d1" stroke-width="1.5"/>
+<text x="1615.0" y="197" class="" font-size="18" text-anchor="middle">Taxonomy</text>
+<text x="1615.0" y="221" class="" font-size="15" text-anchor="middle">GTDB-Tk → GTDB / NCBI</text>
+<rect x="1485" y="307" width="260" height="86" rx="9" fill="#f0edfa" stroke="#b6a6d1" stroke-width="1.5"/>
+<text x="1615.0" y="334" class="" font-size="18" text-anchor="middle">Abundance per sample</text>
+<text x="1615.0" y="358" class="" font-size="15" text-anchor="middle">CoverM + clean paired reads</text>
+<rect x="1485" y="444" width="260" height="86" rx="9" fill="#f0edfa" stroke="#b6a6d1" stroke-width="1.5"/>
+<text x="1615.0" y="471" class="" font-size="18" text-anchor="middle">AMR / virulence in MAGs</text>
+<text x="1615.0" y="495" class="" font-size="15" text-anchor="middle">ABRicate · ResFinder / VFDB</text>
+<rect x="30" y="602" width="825" height="85" rx="9" fill="#f8fafc" stroke="#a9bdcc" stroke-width="1.5"/>
+<text x="442.5" y="629" class="" font-size="18" text-anchor="middle">Parallel analyses on clean reads</text>
+<text x="442.5" y="653" class="" font-size="15" text-anchor="middle">sourmash: sample similarity  |  KMA: AMR / virulence (ResFinder / VFDB)</text>
+<text x="895" y="625" class="" font-size="14" text-anchor="start">Mapping uses clean reads; CoverM also summarizes contig coverage.</text>
+<text x="895" y="650" class="" font-size="14" text-anchor="start">Dashed arrow: clean paired reads reused for MAG abundance.</text>
+<text x="30" y="717" class="" font-size="14" text-anchor="start">* GUNC reports are required for bin selection; their generating rule is absent from the current repository.</text>
+<text x="1770" y="717" class="" font-size="13" text-anchor="end">Fuschi/milk-sewage-wgs · main · 02 Nov 2026</text>
+</svg>

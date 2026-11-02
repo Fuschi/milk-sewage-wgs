@@ -10,8 +10,7 @@ rule coverm_mags:
         genomes="data/drep/dereplicated_genomes",
         methods=(
             "relative_abundance mean trimmed_mean covered_fraction "
-            "covered_bases variance rpkm tpm"
-        )
+            "covered_bases variance length count reads_per_base anir rpkm tpm"),
     threads: 16
     resources:
         mem_mb=32000,
@@ -25,6 +24,10 @@ rule coverm_mags:
             --genome-fasta-directory {params.genomes} \
             --genome-fasta-extension fa \
             --coupled {input.r1} {input.r2} \
+            --min-covered-fraction 0 \
+            --min-read-percent-identity 95 \
+            --min-read-aligned-percent 75 \
+            --exclude-supplementary \
             --methods {params.methods} \
             --threads {threads} \
             --output-file {output} \
